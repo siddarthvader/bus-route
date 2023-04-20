@@ -42,11 +42,14 @@ export default function MapControls() {
 
   const rangeValues = useSpatialStore().getRangeLabel();
 
+  const spatialData = useSpatialStore().spatialData;
+
   return (
     <div className="  rounded-lg bg-white shadow-lg z-[1000] absolute bottom-2 left-[30%] py-2 px-4">
       <div className="flex items-center justify-between">
         <div className="mr-4 font-semibold text-zinc-600">
-          Apr 18, 2023 @ 23:59:13.364 - Apr 18, 2023 @ 23:59:13.364
+          {spatialData[0]["@timestamp"]} -
+          {spatialData[spatialData.length - 1]["@timestamp"]}
         </div>
         <div className="flex flex-1">
           <BackwardButton onClick={() => goBack()} />
@@ -58,8 +61,6 @@ export default function MapControls() {
         rangeList={rangeValues}
         step={1}
         onValueChange={(val) => {
-          console.log({ val });
-          setPlaying(false);
           setActiveSpatial(val);
         }}
       />
