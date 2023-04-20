@@ -13,9 +13,12 @@ const isWindowContext = typeof window !== "undefined";
 
 export default function Home() {
   const setSpatialData = useSpatialStore((state) => state.setSpatialData);
+
+  const setSelectedRoute = useSpatialStore((state) => state.setRoute);
   function loadCSV(filepath: string) {
     readCSVFile(filepath)
       .then((rows) => {
+        setSelectedRoute(filepath);
         setSpatialData(rows.data);
       })
       .catch((error) => {

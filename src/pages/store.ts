@@ -1,8 +1,10 @@
 import { create } from "zustand";
 
 type SpatialStore = {
+  selectedRoute: string;
   spatialData: SpatialEntity[];
-  setSpatialData: Function;
+  setRoute: (route: string) => void;
+  setSpatialData: (spatialData: SpatialEntity[]) => void;
 };
 
 type SpatialEntity = {
@@ -13,9 +15,11 @@ type SpatialEntity = {
 };
 
 const useSpatialStore = create<SpatialStore>((set) => ({
+  selectedRoute: "",
   spatialData: [],
+  setRoute: (route: string) => set(() => ({ selectedRoute: route })),
   setSpatialData: (spatialData: SpatialEntity[]) =>
-    set((state) => ({ spatialData: spatialData })),
+    set(() => ({ spatialData: spatialData })),
 }));
 
 export { useSpatialStore };

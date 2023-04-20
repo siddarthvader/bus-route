@@ -7,6 +7,8 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { LMapState, MapRef } from "./types";
 import { useSpatialStore } from "./store";
+import { LatLngExpression } from "leaflet";
+import { trimLatLang } from "./helper";
 
 const { id, minZoom, maxZoom, initialCenter, width, height, initialScale } =
   defaultMapConfigOption;
@@ -16,8 +18,16 @@ export default function MapComponent() {
   const baseMapRef: MapRef = useRef(null);
 
   const spatialData = useSpatialStore((state) => state.spatialData);
+  const selectedRoute = useSpatialStore((state) => state.selectedRoute);
 
-  console.log("spatialData is...", spatialData);
+  useEffect(() => {
+    if (spatialData.length) {
+      const flyTo: LatLngExpression = trimLatLang(
+        spatialData[0]["route_info.location"]
+      );
+      map?.target?.flyTo(flyTo, 10);
+    }
+  }, [selectedRoute]);
 
   return (
     <MapContainer
@@ -30,7 +40,7 @@ export default function MapComponent() {
       attributionControl={false}
       maxBounds={MapBoundsMax}
       maxBoundsViscosity={1}
-      whenReady={() => setMap}
+      whenReady={setMap}
       bounceAtZoomLimits={false}
     >
       <TileLayer
