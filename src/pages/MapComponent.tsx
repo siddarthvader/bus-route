@@ -7,19 +7,12 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { LMapState, MapRef } from "./types";
 
-const isWindowContext = typeof window !== "undefined";
-
 const { id, minZoom, maxZoom, initialCenter, width, height, initialScale } =
   defaultMapConfigOption;
 
 export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
-
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <MapContainer

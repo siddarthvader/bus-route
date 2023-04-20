@@ -22,3 +22,14 @@ export const defaultMapConfigOption: DefaultMapConfig = {
   initialScale: 4,
   initialCenter: [0, 0],
 };
+
+export const RouteList = [
+  {
+    name: "gps_DL1PC5335",
+    filepath: "gps_DL1PC5335.csv",
+  },
+  {
+    name: "gps_DL1PC9997",
+    filepath: "gps_DL1PC9997.csv",
+  },
+];
