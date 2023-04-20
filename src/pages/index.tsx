@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RouteList } from "./constants";
 import csvParser from "csv-parser";
 import readCSVFile from "./csvParser";
+import { useSpatialStore } from "./store";
 
 const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
   ssr: false,
@@ -11,11 +12,11 @@ const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
 const isWindowContext = typeof window !== "undefined";
 
 export default function Home() {
-  const [text, setText] = useState<string>();
+  const setSpatialData = useSpatialStore((state) => state.setSpatialData);
   function loadCSV(filepath: string) {
     readCSVFile(filepath)
       .then((rows) => {
-        console.log(rows); // Do something with the rows
+        setSpatialData(rows.data);
       })
       .catch((error) => {
         console.error(error);

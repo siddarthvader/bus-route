@@ -6,6 +6,7 @@ import {
 } from "./constants";
 import { useEffect, useRef, useState } from "react";
 import { LMapState, MapRef } from "./types";
+import { useSpatialStore } from "./store";
 
 const { id, minZoom, maxZoom, initialCenter, width, height, initialScale } =
   defaultMapConfigOption;
@@ -13,6 +14,10 @@ const { id, minZoom, maxZoom, initialCenter, width, height, initialScale } =
 export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
+
+  const spatialData = useSpatialStore((state) => state.spatialData);
+
+  console.log("spatialData is...", spatialData);
 
   return (
     <MapContainer
