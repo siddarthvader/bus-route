@@ -9,7 +9,7 @@ interface RangeSliderProps {
 
 function RangeSlider(props: RangeSliderProps) {
   const minValue = 0;
-  const maxValue = props.rangeList.length;
+  const maxValue = props.rangeList.length - 1;
 
   const [value, setValue] = useState(minValue);
 
@@ -19,8 +19,6 @@ function RangeSlider(props: RangeSliderProps) {
   );
 
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("event.target.value", event.target.value);
-
     setValue(Number(event.target.value));
     if (props.onValueChange) {
       props.onValueChange(Number(event.target.value));

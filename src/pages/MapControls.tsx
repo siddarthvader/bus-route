@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import RangeSlider from "./RangeSlider";
 import { useSpatialStore } from "./store";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Label = {
   label: string;
@@ -15,33 +15,28 @@ type Label = {
 };
 
 export default function MapControls() {
-  const increaseActiveSpatial = useSpatialStore().increaseActiveSpatial;
-
   const [isPlaying, setPlaying] = useState(false);
 
   const setActiveSpatial = useSpatialStore().setActiveSpatial;
   const activeSpatial = useSpatialStore().activeSpatial;
-  const isLastSpatial = useSpatialStore().isLastSpatial;
+
+  const increaseActiveSpatial = useSpatialStore().increaseActiveSpatial;
   function goBack() {
-    if (activeSpatial >= 1) {
-      setActiveSpatial(activeSpatial - 1);
-    }
+    setActiveSpatial(activeSpatial - 1);
   }
   function goForward() {
-    if (!isLastSpatial()) {
-      setActiveSpatial(activeSpatial + 1);
-    }
+    setActiveSpatial(activeSpatial + 1);
   }
+  const intervalRef = useRef(null);
   function togglePlay() {
-    let interval;
-    if (isPlaying && isLastSpatial()) {
-      clearInterval(interval);
+    if (isPlaying) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     } else {
-      interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         increaseActiveSpatial();
       }, 500);
     }
-
     setPlaying((prev) => !prev);
   }
 
@@ -63,8 +58,8 @@ export default function MapControls() {
         rangeList={rangeValues}
         step={1}
         onValueChange={(val) => {
+          console.log({ val });
           setPlaying(false);
-          console.log("val");
           setActiveSpatial(val);
         }}
       />
