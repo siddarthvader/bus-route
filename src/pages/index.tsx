@@ -1,10 +1,9 @@
 import dynamic from "next/dynamic";
-import { useState } from "react";
+
 import { RouteList } from "./constants";
-import csvParser from "csv-parser";
+
 import readCSVFile from "./csvParser";
 import { useSpatialStore } from "./store";
-import MapControls from "./MapControls";
 
 const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
   ssr: false,
@@ -29,8 +28,10 @@ export default function Home() {
 
   return (
     <main className="flex flex-row min-h-screen p-4">
-      <div className="flex flex-col w-[20%] p-2  bg-white">
-        <div className="font-semibold">Select Bus Routes</div>
+      <div className="flex flex-col w-[20%] p-2  bg-white items-center  pt-6">
+        <div className="text-xl font-semibold text-zinc-600">
+          Select Bus Routes
+        </div>
         {RouteList.map((item, index) => (
           <div
             key={index}

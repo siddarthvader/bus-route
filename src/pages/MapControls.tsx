@@ -6,42 +6,46 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import RangeSlider from "./RangeSlider";
+import { useSpatialStore } from "./store";
+import { useState } from "react";
 
 type Label = {
   label: string;
   value: number;
 };
-const Labels: Label[] = [
-  {
-    label: "1",
-    value: 1,
-  },
-  {
-    label: "2",
-    value: 2,
-  },
-  {
-    label: "3",
-    value: 3,
-  },
-  {
-    label: "4",
-    value: 4,
-  },
-  {
-    label: "5",
-    value: 5,
-  },
-  {
-    label: "6",
-    value: 6,
-  },
-];
 
 export default function MapControls() {
-  function goBack() {}
-  function goForward() {}
-  function togglePlay() {}
+  const increaseActiveSpatial = useSpatialStore().increaseActiveSpatial;
+
+  const [isPlaying, setPlaying] = useState(false);
+
+  const setActiveSpatial = useSpatialStore().setActiveSpatial;
+  const activeSpatial = useSpatialStore().activeSpatial;
+  const isLastSpatial = useSpatialStore().isLastSpatial;
+  function goBack() {
+    if (activeSpatial >= 1) {
+      setActiveSpatial(activeSpatial - 1);
+    }
+  }
+  function goForward() {
+    if (!isLastSpatial()) {
+      setActiveSpatial(activeSpatial + 1);
+    }
+  }
+  function togglePlay() {
+    let interval;
+    if (isPlaying && isLastSpatial()) {
+      clearInterval(interval);
+    } else {
+      interval = setInterval(() => {
+        increaseActiveSpatial();
+      }, 500);
+    }
+
+    setPlaying((prev) => !prev);
+  }
+
+  const rangeValues = useSpatialStore().getRangeLabel();
 
   return (
     <div className="  rounded-lg bg-white shadow-lg z-[1000] absolute bottom-2 left-[30%] py-2 px-4">
@@ -51,11 +55,19 @@ export default function MapControls() {
         </div>
         <div className="flex flex-1">
           <BackwardButton onClick={() => goBack()} />
-          <PlayPauseButton onClick={() => togglePlay()} isPlaying={false} />
+          <PlayPauseButton onClick={() => togglePlay()} isPlaying={isPlaying} />
           <ForwardButton onClick={() => goForward()} />
         </div>
       </div>
-      <RangeSlider labels={Labels} maxValue={6} minValue={1} step={1} />
+      <RangeSlider
+        rangeList={rangeValues}
+        step={1}
+        onValueChange={(val) => {
+          setPlaying(false);
+          console.log("val");
+          setActiveSpatial(val);
+        }}
+      />
     </div>
   );
 }

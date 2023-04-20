@@ -1,35 +1,49 @@
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import {
   MapBoundsMax,
   MapboxConfig,
   defaultMapConfigOption,
 } from "./constants";
 import { useEffect, useRef, useState } from "react";
-import { LMapState, MapRef } from "./types";
+import { DefaultMapConfig, LMapState, MapRef } from "./types";
 import { useSpatialStore } from "./store";
 import { LatLngExpression } from "leaflet";
 import { trimLatLang } from "./helper";
 import MapControls from "./MapControls";
+import L from "leaflet";
 
-const { id, minZoom, maxZoom, initialCenter, width, height, initialScale } =
-  defaultMapConfigOption;
+const {
+  id,
+  minZoom,
+  maxZoom,
+  initialCenter,
+  width,
+  height,
+  initialScale,
+}: DefaultMapConfig = defaultMapConfigOption;
 
 export default function MapComponent() {
+  const spatialData = useSpatialStore((state) => state.spatialData);
+  const selectedRoute = useSpatialStore((state) => state.selectedRoute);
+  const getBusLocation = useSpatialStore().getBusLocation;
+
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
-  const spatialData = useSpatialStore((state) => state.spatialData);
-  const selectedRoute = useSpatialStore((state) => state.selectedRoute);
-
   useEffect(() => {
     if (spatialData.length) {
-      console.log({ spatialData });
       const flyTo: LatLngExpression = trimLatLang(
         spatialData[0]["route_info.location"]
-      );
-      map?.target?.flyTo(flyTo, 16);
+      ) || { lat: 0, lng: 0 };
+
+      map?.target?.flyTo(flyTo, 12);
     }
   }, [selectedRoute]);
+
+  const myIcon = L.icon({
+    iconUrl: "/bus.png",
+    iconSize: [32, 32],
+  });
 
   return (
     <div className="relative flex h-full">
@@ -54,6 +68,7 @@ export default function MapComponent() {
             bounds={MapBoundsMax}
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
+          <Marker position={getBusLocation() || [0, 0]} icon={myIcon} />
         </MapContainer>
       </div>
       {selectedRoute && <MapControls />}
