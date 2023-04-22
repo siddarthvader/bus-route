@@ -1,5 +1,5 @@
 import { BoundsLiteral, PointTuple } from "leaflet";
-import { DefaultMapConfig } from "./types";
+import { DefaultMapConfig, MapGstfToObject } from "./types";
 
 export const MapboxConfig = {
   accessToken:
@@ -33,3 +33,16 @@ export const RouteList = [
     filepath: "gps_DL1PC9997.csv",
   },
 ];
+
+export const GTFSConfig = {
+  url: "depot_tool_duty_master.txt",
+};
+
+export const mapGSTFType: MapGstfToObject = {
+  "Duty ID": "duty_id",
+  "Plate No.": "plate_no",
+  "Route No.": "route_no",
+  "Trip End Time": "trip_end_time",
+  "Trip Start Time": "trip_start_time",
+  "Trip Number": "trip_number",
+};

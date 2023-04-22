@@ -39,3 +39,30 @@ export type SpatialEntity = {
   "route_info.timestamp": string;
   "route_info.vid": string;
 };
+
+export type GstfObject = {
+  duty_id: string;
+  plate_no: string;
+  route_no: string;
+  trip_end_time: string;
+  trip_start_time: string;
+  trip_number: string;
+};
+
+export type GstfTextHeaders = {
+  "Duty ID": string;
+  "Plate No.": string;
+  "Route No.": string;
+  "Trip End Time": string;
+  "Trip Start Time": string;
+  "Trip Number": string;
+};
+
+export type MapGstfToObject = {
+  "Duty ID": "duty_id";
+  "Plate No.": "plate_no";
+  "Route No.": "route_no";
+  "Trip End Time": "trip_end_time";
+  "Trip Start Time": "trip_start_time";
+  "Trip Number": "trip_number";
+};

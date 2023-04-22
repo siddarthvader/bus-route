@@ -1,9 +1,16 @@
 import dynamic from "next/dynamic";
 
-import { RouteList } from "./constants";
+import { GTFSConfig, RouteList } from "./constants";
 
 import readCSVFile from "./csvParser";
 import { useSpatialStore } from "./store";
+import {
+  fetchGTFSDataFROMURL,
+  fetchGTFSFromTxtfile,
+  readTextFile,
+  readTextFileToJSON,
+} from "./api";
+import { useEffect } from "react";
 
 const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
   ssr: false,
