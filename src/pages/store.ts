@@ -1,26 +1,6 @@
-import { LatLngExpression, LatLngTuple } from "leaflet";
 import { create } from "zustand";
 import { trimLatLang } from "./helper";
-
-type SpatialStore = {
-  selectedRoute: string;
-  spatialData: SpatialEntity[];
-  setRoute: (route: string) => void;
-  setSpatialData: (spatialData: SpatialEntity[]) => void;
-  getRangeLabel: () => number[];
-  activeSpatial: number;
-  setActiveSpatial: (activeSpatial: number) => void;
-  increaseActiveSpatial: () => void;
-  getBusLocation: () => LatLngExpression | null;
-  isLastSpatial: () => Boolean;
-};
-
-type SpatialEntity = {
-  "@timestamp": string;
-  "route_info.location": string;
-  "route_info.timestamp": string;
-  "route_info.vid": string;
-};
+import { SpatialEntity, SpatialStore } from "./types";
 
 const useSpatialStore = create<SpatialStore>((set, get) => ({
   selectedRoute: "",
@@ -35,6 +15,7 @@ const useSpatialStore = create<SpatialStore>((set, get) => ({
             Date.parse(first["@timestamp"]) - Date.parse(second["@timestamp"])
         ),
     })),
+
   getRangeLabel: () => {
     const data = get().spatialData;
     let result: number[] = [];

@@ -38,7 +38,7 @@ export default function MapComponent() {
 
       map?.target?.flyTo(flyTo, 12);
     }
-  }, [selectedRoute]);
+  }, [spatialData, map?.target]);
 
   const myIcon = L.icon({
     iconUrl: "/bus.png",
