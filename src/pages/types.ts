@@ -40,7 +40,7 @@ export type SpatialEntity = {
   "route_info.vid": string;
 };
 
-export type GstfObject = {
+export type ScheduleObject = {
   duty_id: string;
   plate_no: string;
   route_no: string;
@@ -48,6 +48,8 @@ export type GstfObject = {
   trip_start_time: string;
   trip_number: string;
 };
+
+export interface RouteTableRow extends ScheduleObject {}
 
 export type GstfTextHeaders = {
   "Duty ID": string;
@@ -58,11 +60,6 @@ export type GstfTextHeaders = {
   "Trip Number": string;
 };
 
-export type MapGstfToObject = {
-  "Duty ID": "duty_id";
-  "Plate No.": "plate_no";
-  "Route No.": "route_no";
-  "Trip End Time": "trip_end_time";
-  "Trip Start Time": "trip_start_time";
-  "Trip Number": "trip_number";
+export type MapGstfToSchedule = {
+  [K in keyof GstfTextHeaders]: string;
 };

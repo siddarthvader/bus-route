@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { trimLatLang } from "./helper";
-import { SpatialEntity, SpatialStore } from "./types";
+import { ScheduleObject, SpatialEntity, SpatialStore } from "./types";
 
 const useSpatialStore = create<SpatialStore>((set, get) => ({
   selectedRoute: "",
@@ -52,4 +52,14 @@ const useSpatialStore = create<SpatialStore>((set, get) => ({
   },
 }));
 
-export { useSpatialStore };
+type ScheduleStore = {
+  routeList: ScheduleObject[];
+  setRouteList: (routeList: ScheduleObject[]) => void;
+};
+
+const useScheduleStore = create<ScheduleStore>((set, get) => ({
+  routeList: [],
+  setRouteList: (routeList: ScheduleObject[]) => set(() => ({ routeList })),
+}));
+
+export { useSpatialStore, useScheduleStore };

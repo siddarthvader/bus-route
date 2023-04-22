@@ -1,5 +1,5 @@
 import { BoundsLiteral, PointTuple } from "leaflet";
-import { DefaultMapConfig, MapGstfToObject } from "./types";
+import { DefaultMapConfig, MapGstfToSchedule } from "./types";
 
 export const MapboxConfig = {
   accessToken:
@@ -38,7 +38,7 @@ export const GTFSConfig = {
   url: "depot_tool_duty_master.txt",
 };
 
-export const mapGSTFType: MapGstfToObject = {
+export const mapGSTFType: MapGstfToSchedule = {
   "Duty ID": "duty_id",
   "Plate No.": "plate_no",
   "Route No.": "route_no",

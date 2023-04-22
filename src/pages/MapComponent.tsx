@@ -46,7 +46,7 @@ export default function MapComponent() {
   });
 
   return (
-    <div className="relative flex h-full">
+    <div className="relative flex h-[70%]">
       <div className="h-full z-[999] flex w-full">
         <MapContainer
           id={id}

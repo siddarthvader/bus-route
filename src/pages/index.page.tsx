@@ -4,13 +4,9 @@ import { GTFSConfig, RouteList } from "./constants";
 
 import readCSVFile from "./csvParser";
 import { useSpatialStore } from "./store";
-import {
-  fetchGTFSDataFROMURL,
-  fetchGTFSFromTxtfile,
-  readTextFile,
-  readTextFileToJSON,
-} from "./api";
+
 import { useEffect } from "react";
+import RouteTable from "./RouteTable";
 
 const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
   ssr: false,
@@ -49,7 +45,10 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <div className=" w-[80%] p-2">{isWindowContext && <MapComponent />}</div>)
+      <div className=" w-[80%] p-2 h-[100vh]">
+        <MapComponent />
+        <RouteTable />
+      </div>
     </main>
   );
 }
