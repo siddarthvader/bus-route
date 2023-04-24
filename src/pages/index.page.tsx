@@ -7,8 +7,6 @@ const MapComponent = dynamic(() => import("src/components/MapComponent.tsx"), {
   ssr: false,
 });
 
-const isWindowContext = typeof window !== "undefined";
-
 export default function Home() {
   return (
     <main className="flex flex-col min-h-screen">

@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 
 import {
+  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { RouteTableRow, ScheduleObject } from "../helpers/types";
 import { readGSTFile } from "../helpers/api";
 import { GTFSConfig } from "../helpers/constants";
 import { useScheduleStore } from "../store/store";
+import Filter from "./Filter";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
 
@@ -51,14 +58,20 @@ function RouteTable() {
   const routeList = useScheduleStore((state) => state.routeList);
   const [filepath] = useState<string>(GTFSConfig.url);
 
-  const [globalFilter, setGlobalFilter] = useState<string>("");
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable<RouteTableRow>({
     columns,
     data: routeList,
+    state: {
+      columnFilters,
+    },
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   useEffect(() => {
@@ -66,6 +79,15 @@ function RouteTable() {
       setRouteList(data);
     });
   }, []);
+
+  useEffect(() => {
+    if (table.getState().columnFilters[0]?.id === "duty_id") {
+      if (table.getState().sorting[0]?.id !== "duty_id") {
+        table.setSorting([{ id: "duty_id", desc: false }]);
+      }
+    }
+  }, [table.getState().columnFilters[0]?.id]);
+
   return (
     <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
       <div className="flex items-center justify-end px-4 space-x-2">
@@ -143,6 +165,11 @@ function RouteTable() {
                     header.column.columnDef.header,
                     header.getContext()
                   )}
+                  {header.column.getCanFilter() ? (
+                    <div>
+                      <Filter column={header.column} table={table} />
+                    </div>
+                  ) : null}
                 </th>
               ))}
             </tr>

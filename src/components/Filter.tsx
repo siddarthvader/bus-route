@@ -1,4 +1,6 @@
+import { Column, Table } from "@tanstack/react-table";
 import DebouncedInput from "./DebouncedInput";
+import { useMemo } from "react";
 
 export default function Filter({
   column,
@@ -13,7 +15,7 @@ export default function Filter({
 
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = React.useMemo(
+  const sortedUniqueValues = useMemo(
     () =>
       typeof firstValue === "number"
         ? []
@@ -69,7 +71,7 @@ export default function Filter({
         value={(columnFilterValue ?? "") as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="border rounded shadow w-36"
+        className="p-2 border border-blue-500 rounded shadow w-36"
         list={column.id + "list"}
       />
       <div className="h-1" />
