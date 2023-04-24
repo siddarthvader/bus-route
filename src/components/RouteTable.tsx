@@ -5,19 +5,17 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { RouteTableRow, ScheduleObject } from "../helpers/types";
+import { RouteTableRow } from "../helpers/types";
 import { readGSTFile } from "../helpers/api";
 import { GTFSConfig } from "../helpers/constants";
 import { useScheduleStore } from "../store/store";
-import Filter from "./Filter";
+import ColumnFilter from "./ColumnFilter";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
 
@@ -79,6 +77,8 @@ function RouteTable() {
       setRouteList(data);
     });
   }, []);
+
+  // console.log("header.column.getCanFilter()", header.column.getCanFilter());
 
   return (
     <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
@@ -159,7 +159,7 @@ function RouteTable() {
                   )}
                   {header.column.getCanFilter() ? (
                     <div>
-                      <Filter column={header.column} table={table} />
+                      <ColumnFilter column={header.column} table={table} />
                     </div>
                   ) : null}
                 </th>

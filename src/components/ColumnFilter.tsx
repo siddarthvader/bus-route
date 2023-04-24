@@ -2,7 +2,7 @@ import { Column, Table } from "@tanstack/react-table";
 import DebouncedInput from "./DebouncedInput";
 import { useMemo } from "react";
 
-export default function Filter({
+export default function ColumnFilter({
   column,
   table,
 }: {

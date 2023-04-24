@@ -68,7 +68,7 @@ export default function MapComponent() {
             bounds={MapBoundsMax}
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
-          <Marker position={getBusLocation() || [0, 0]} icon={myIcon} />
+          {/* <Marker position={getBusLocation() || [0, 0]} icon={myIcon} /> */}
         </MapContainer>
       </div>
       {selectedRoute && <MapControls />}
