@@ -67,11 +67,11 @@ function RouteTable() {
       columnFilters,
     },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    onColumnFiltersChange: setColumnFilters,
   });
 
   useEffect(() => {
@@ -79,14 +79,6 @@ function RouteTable() {
       setRouteList(data);
     });
   }, []);
-
-  useEffect(() => {
-    if (table.getState().columnFilters[0]?.id === "duty_id") {
-      if (table.getState().sorting[0]?.id !== "duty_id") {
-        table.setSorting([{ id: "duty_id", desc: false }]);
-      }
-    }
-  }, [table.getState().columnFilters[0]?.id]);
 
   return (
     <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
