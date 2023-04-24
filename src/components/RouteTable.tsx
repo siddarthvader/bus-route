@@ -11,9 +11,13 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { RouteTableRow } from "../helpers/types";
+import {
+  GstfTextHeaders,
+  RouteTableRow,
+  ScheduleObject,
+} from "../helpers/types";
 import { readGSTFile } from "../helpers/api";
-import { EnableFilter, GTFSConfig } from "../helpers/constants";
+import { EnableFilter, GTFSConfig, mapGSTFType } from "../helpers/constants";
 import { useScheduleStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
 
@@ -73,9 +77,11 @@ function RouteTable() {
   });
 
   useEffect(() => {
-    readGSTFile(filepath).then((data) => {
-      setRouteList(data);
-    });
+    readGSTFile<GstfTextHeaders, ScheduleObject>(filepath, mapGSTFType).then(
+      (data) => {
+        setRouteList(data);
+      }
+    );
   }, []);
 
   // console.log("header.column.getCanFilter()", header.column.getCanFilter());
