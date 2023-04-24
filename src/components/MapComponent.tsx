@@ -3,12 +3,12 @@ import {
   MapBoundsMax,
   MapboxConfig,
   defaultMapConfigOption,
-} from "./constants";
+} from "../helpers/constants";
 import { useEffect, useRef, useState } from "react";
-import { DefaultMapConfig, LMapState, MapRef } from "./types";
-import { useSpatialStore } from "./store";
+import { DefaultMapConfig, LMapState, MapRef } from "../helpers/types";
+import { useSpatialStore } from "../store/store";
 import { LatLngExpression } from "leaflet";
-import { trimLatLang } from "./helper";
+import { trimLatLang } from "../helpers/helper";
 import MapControls from "./MapControls";
 import L from "leaflet";
 

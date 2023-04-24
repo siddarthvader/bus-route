@@ -6,7 +6,7 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import RangeSlider from "./RangeSlider";
-import { useSpatialStore } from "./store";
+import { useSpatialStore } from "../store/store";
 import { useRef, useState } from "react";
 
 type Label = {

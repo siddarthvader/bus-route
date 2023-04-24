@@ -7,10 +7,10 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { RouteTableRow, ScheduleObject } from "./types";
-import { readGSTFile } from "./api";
-import { GTFSConfig } from "./constants";
-import { useScheduleStore } from "./store";
+import { RouteTableRow, ScheduleObject } from "../helpers/types";
+import { readGSTFile } from "../helpers/api";
+import { GTFSConfig } from "../helpers/constants";
+import { useScheduleStore } from "../store/store";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
 
@@ -51,11 +51,14 @@ function RouteTable() {
   const routeList = useScheduleStore((state) => state.routeList);
   const [filepath] = useState<string>(GTFSConfig.url);
 
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+
   const table = useReactTable<RouteTableRow>({
     columns,
     data: routeList,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
   });
 
   useEffect(() => {
@@ -65,30 +68,30 @@ function RouteTable() {
   }, []);
   return (
     <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
-      <div className="flex items-center justify-end gap-2">
+      <div className="flex items-center justify-end px-4 space-x-2">
         <button
-          className="p-1 border rounded"
+          className="px-2 border rounded shadow-xs"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
           {"<<"}
         </button>
         <button
-          className="p-1 border rounded"
+          className="px-2 border rounded"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          className="p-1 border rounded"
+          className="px-2 border rounded"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
           {">"}
         </button>
         <button
-          className="p-1 border rounded"
+          className="px-2 border rounded"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >
@@ -110,7 +113,7 @@ function RouteTable() {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="w-16 p-1 border rounded"
+            className="w-16 p-2 my-2 border rounded"
           />
         </span>
         <select
@@ -118,6 +121,7 @@ function RouteTable() {
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
           }}
+          className="py-2 mr-2 border rounded"
         >
           {[10, 20, 30, 40, 50].map((pageSize) => (
             <option key={pageSize} value={pageSize}>

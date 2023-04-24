@@ -1,14 +1,14 @@
 import dynamic from "next/dynamic";
 
-import { GTFSConfig, RouteList } from "./constants";
+import { GTFSConfig, RouteList } from "../helpers/constants";
 
-import readCSVFile from "./csvParser";
-import { useSpatialStore } from "./store";
+import readCSVFile from "../helpers/csvParser";
+import { useSpatialStore } from "../store/store";
 
-import RouteTable from "./RouteTable";
-import Header from "./Header";
+import RouteTable from "../components/RouteTable";
+import Header from "../components/Header";
 
-const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
+const MapComponent = dynamic(() => import("src/components/MapComponent.tsx"), {
   ssr: false,
 });
 

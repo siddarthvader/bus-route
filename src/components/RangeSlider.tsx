@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { getAxisLabelFromTime } from "./helper";
+import { getAxisLabelFromTime } from "../helpers/helper";
 
 interface RangeSliderProps {
   step: number;

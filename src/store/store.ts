@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { trimLatLang } from "./helper";
-import { ScheduleObject, SpatialEntity, SpatialStore } from "./types";
+import { trimLatLang } from "../helpers/helper";
+import { ScheduleObject, SpatialEntity, SpatialStore } from "../helpers/types";
 
 const useSpatialStore = create<SpatialStore>((set, get) => ({
   selectedRoute: "",
