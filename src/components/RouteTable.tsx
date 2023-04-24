@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 import { RouteTableRow } from "../helpers/types";
 import { readGSTFile } from "../helpers/api";
-import { GTFSConfig } from "../helpers/constants";
+import { EnableFilter, GTFSConfig } from "../helpers/constants";
 import { useScheduleStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
 
@@ -157,7 +157,10 @@ function RouteTable() {
                     header.column.columnDef.header,
                     header.getContext()
                   )}
-                  {header.column.getCanFilter() ? (
+                  {header.column.getCanFilter() &&
+                  EnableFilter.includes(
+                    header.column.id as keyof RouteTableRow
+                  ) ? (
                     <div>
                       <ColumnFilter column={header.column} table={table} />
                     </div>

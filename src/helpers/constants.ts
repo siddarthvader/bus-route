@@ -46,3 +46,5 @@ export const mapGSTFType: MapGstfToSchedule = {
   "Trip Start Time": "trip_start_time",
   "Trip Number": "trip_number",
 };
+
+export const EnableFilter: string[] = ["plate_no"];
