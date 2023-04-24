@@ -37,7 +37,7 @@ const columns = [
     id: "actions",
     cell: (info) => (
       <div className="">
-        <button className="w-auto p-2 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent">
+        <button className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent">
           Get Route
         </button>
       </div>
@@ -64,38 +64,8 @@ function RouteTable() {
     });
   }, []);
   return (
-    <div className="w-full h-[30%] p-2 overflow-auto bg-white text-zinc-700">
-      <table className="w-full h-[70%] p-2 min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="px-6 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase"
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-6 py-4 whitespace-nowrap ">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="flex items-center gap-2">
+    <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
+      <div className="flex items-center justify-end gap-2">
         <button
           className="p-1 border rounded"
           onClick={() => table.setPageIndex(0)}
@@ -156,6 +126,36 @@ function RouteTable() {
           ))}
         </select>
       </div>
+      <table className="w-full h-[300px] overflow-auto p-2 min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="p-2 text-xs font-bold tracking-wider text-left text-gray-500 uppercase"
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200 ">
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="p-2 text-xs whitespace-nowrap">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

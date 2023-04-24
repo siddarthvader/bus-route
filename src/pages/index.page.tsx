@@ -5,8 +5,8 @@ import { GTFSConfig, RouteList } from "./constants";
 import readCSVFile from "./csvParser";
 import { useSpatialStore } from "./store";
 
-import { useEffect } from "react";
 import RouteTable from "./RouteTable";
+import Header from "./Header";
 
 const MapComponent = dynamic(() => import("src/pages/MapComponent.tsx"), {
   ssr: false,
@@ -30,8 +30,8 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-row min-h-screen p-4">
-      <div className="flex flex-col w-[20%] p-2  bg-white items-center  pt-6">
+    <main className="flex flex-col min-h-screen">
+      {/* <div className="flex flex-col w-[20%] p-2  bg-white items-center  pt-6">
         <div className="text-xl font-semibold text-zinc-600">
           Select Bus Routes
         </div>
@@ -44,8 +44,9 @@ export default function Home() {
             {item.name}
           </div>
         ))}
-      </div>
-      <div className=" w-[80%] p-2 h-[100vh]">
+      </div> */}
+      <Header />
+      <div className=" w-[90%] m-auto p-2 h-[calc(100vh- 40px)]">
         <MapComponent />
         <RouteTable />
       </div>
