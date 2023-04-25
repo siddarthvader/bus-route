@@ -1,4 +1,5 @@
 import { LatLngExpression, Map, TileLayer } from "leaflet";
+import internal from "stream";
 
 export interface LMapState {
   target: LeafletMap | null;
@@ -40,6 +41,21 @@ export type SpatialEntity = {
   "route_info.vid": string;
 };
 
+export type ScheduleStore = {
+  routeList: ScheduleObject[];
+  setRouteList: (routeList: ScheduleObject[]) => void;
+};
+
+export type URLStore = {
+  agency_id: string;
+  setAgencyId: (agency_id: string) => void;
+};
+
+export type Agency = {
+  agency_id: string;
+  agency_name: string;
+};
+
 export type ScheduleObject = {
   duty_id: string;
   plate_no: string;
@@ -58,6 +74,38 @@ export type GstfTextHeaders = {
   "Trip End Time": string;
   "Trip Start Time": string;
   "Trip Number": string;
+};
+
+export type StopsGstfTextHeaders = {
+  stop_id: string;
+  stop_code: string;
+  stop_name: string;
+  stop_lat: string;
+  stop_lon: string;
+  zone_id: string;
+};
+
+export type RouteGsftTextHeaders = {
+  agency_id: string;
+  route_id: string;
+  route_long_name: string;
+  route_short_name: string;
+  route_type: string;
+};
+
+export type TripGsftTextHeaders = {
+  route_id: string;
+  service_id: string;
+  trip_id: string;
+  shape_id: string;
+};
+
+export type StopTimeGsftTextHeaders = {
+  trip_id: string;
+  arrival_time: string;
+  departure_time: string;
+  stop_id: string;
+  stop_sequence: string;
 };
 
 export type MapGstfToSchedule = {

@@ -16,9 +16,9 @@ import {
   RouteTableRow,
   ScheduleObject,
 } from "../helpers/types";
-import { readGSTFile } from "../helpers/api";
-import { EnableFilter, GTFSConfig, mapGSTFType } from "../helpers/constants";
-import { useScheduleStore } from "../store/store";
+import { getStopsForRouteId, readGSTFile } from "../helpers/api";
+import { EnableFilter, GTFSConfig, MapGstfHeaders } from "../helpers/constants";
+import { useScheduleStore, useURLStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
@@ -46,7 +46,15 @@ const columns = [
     id: "actions",
     cell: (info) => (
       <div className="">
-        <button className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent">
+        <button
+          className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
+          onClick={(e) =>
+            getStopsForRouteId(
+              info.row.getValue("route_no"),
+              useURLStore.getState().agency_id
+            )
+          }
+        >
           Get Route
         </button>
       </div>
@@ -61,6 +69,10 @@ function RouteTable() {
   const [filepath] = useState<string>(GTFSConfig.url);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const agency_id = useURLStore<string>((state) => state.agency_id);
+
+  // console.log({ agency_id });
 
   const table = useReactTable<RouteTableRow>({
     columns,
@@ -77,7 +89,7 @@ function RouteTable() {
   });
 
   useEffect(() => {
-    readGSTFile<GstfTextHeaders, ScheduleObject>(filepath, mapGSTFType).then(
+    readGSTFile<GstfTextHeaders, ScheduleObject>(filepath, MapGstfHeaders).then(
       (data) => {
         setRouteList(data);
       }
@@ -180,7 +192,10 @@ function RouteTable() {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="p-2 text-xs whitespace-nowrap">
+                <td
+                  key={cell.id}
+                  className="p-2 text-xs break-words whitespace-normal"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
