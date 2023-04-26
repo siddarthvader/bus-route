@@ -29,7 +29,6 @@ export type RouteStore = {
   activeSpatial: number;
   setActiveSpatial: (activeSpatial: number) => void;
   increaseActiveSpatial: () => void;
-  getBusLocation: () => LatLngExpression | null;
   isLastSpatial: () => Boolean;
 };
 

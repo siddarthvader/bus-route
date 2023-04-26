@@ -32,15 +32,6 @@ const useRouteStore = create<RouteStore>((set, get) => ({
       set((state) => ({ activeSpatial: state.activeSpatial + 1 }));
     }
   },
-  getBusLocation: () => {
-    const data = get().routeData;
-
-    if (data.length == 0) {
-      return null;
-    }
-
-    return trimLatLang(data[get().activeSpatial]["route_info.location"]);
-  },
   isLastSpatial: () => {
     return get().routeData.length - 1 <= get().activeSpatial;
   },

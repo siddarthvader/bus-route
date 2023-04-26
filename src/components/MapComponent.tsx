@@ -1,12 +1,6 @@
 import { LatLngExpression, Point } from "leaflet";
 import { useEffect, useRef, useState } from "react";
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  CircleMarker,
-  Polyline,
-} from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import {
   MapBoundsMax,
   MapboxConfig,

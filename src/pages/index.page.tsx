@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     setAgencyId(router.query.agency_id as string);
-  }, [router.query]);
+  }, [router.query, setAgencyId]);
 
   return (
     <main className="flex flex-col min-h-screen">
