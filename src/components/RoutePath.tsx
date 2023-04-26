@@ -1,33 +1,54 @@
+import { StopsEntity } from "@/helpers/types";
 import React from "react";
 import { CircleMarker, Marker, Polyline, Tooltip } from "react-leaflet";
 
 type RoutePathProps = {
-  latlngList: number[][];
+  sortedRoute: StopsEntity[];
 };
 
 function RoutePath(props: RoutePathProps) {
-  const { latlngList } = props;
+  const { sortedRoute } = props;
 
-  return latlngList.map((item, index) => (
-    <>
-      {index === 0 ? <Marker position={[item[0], item[1]]} /> : null}
-      <CircleMarker center={[item[0], item[1]]} radius={2}>
-        <Tooltip>Point Tooltip</Tooltip>
+  return sortedRoute.map((stop, index) => (
+    <div key={"wrapper_" + index}>
+      {index === 0 ? (
+        <Marker
+          key={"start_" + index}
+          position={[stop.stop_lat, stop.stop_lon]}
+        />
+      ) : null}
+      <CircleMarker
+        key={"circle_" + index}
+        center={[stop.stop_lat, stop.stop_lon]}
+        radius={2}
+      >
+        <Tooltip key={"tp1" + index}>
+          <div>Stop code: {stop.stop_code}</div>
+          <div>Stop Name: {stop.stop_name}</div>
+        </Tooltip>
       </CircleMarker>
       <Polyline
-        key={index}
+        key={"poly_" + index}
         positions={[
-          [item[0], item[1]],
+          [stop.stop_lat, stop.stop_lon],
           [
-            latlngList[index + 1]?.[0] ?? item[0],
-            latlngList[index + 1]?.[1] ?? item[1],
+            sortedRoute[index + 1]?.stop_lat ?? stop.stop_lat,
+            sortedRoute[index + 1]?.stop_lon ?? stop.stop_lon,
           ],
         ]}
-      ></Polyline>
-      {index === latlngList.length - 1 ? (
-        <Marker position={[item[0], item[1]]} />
+      >
+        <Tooltip key={"tp2_" + index}>
+          <div>Stop code: {stop.stop_code}</div>
+          <div>Stop Name: {stop.stop_name}</div>
+        </Tooltip>
+      </Polyline>
+      {index === sortedRoute.length - 1 ? (
+        <Marker
+          key={"stop_" + index}
+          position={[stop.stop_lat, stop.stop_lon]}
+        />
       ) : null}
-    </>
+    </div>
   ));
 }
 

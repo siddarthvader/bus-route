@@ -77,7 +77,15 @@ export type StopsGstfTextHeaders = {
   zone_id: string;
 };
 
-export interface StopsEntity extends Omit<StopsGstfTextHeaders, "zone_id"> {}
+export type StopsObject = {
+  stop_id: number;
+  stop_code: string;
+  stop_name: string;
+  stop_lat: number;
+  stop_lon: number;
+};
+
+export interface StopsEntity extends StopsObject {}
 
 export type RouteGsftTextHeaders = {
   agency_id: string;

@@ -79,17 +79,21 @@ async function getStopsForRouteId(
   // Find the stop IDs for the trip IDs
   const stopIds = stopTimesData
     .filter((stopTime) => tripIds.includes(stopTime.trip_id))
-    .map((stopTime) => stopTime.stop_id);
+    .sort((a, b) => Number(a.stop_sequence) - Number(b.stop_sequence))
+    .map((stopTime) => Number(stopTime.stop_id));
+
+  console.log({ stopIds });
   // Find the stop data for the stop IDs
   const stopsForRoute = stopsData
-    .filter((stop) => stopIds.includes(stop.stop_id))
+    .filter((stop) => stopIds.includes(Number(stop.stop_id)))
     .map((stop) => ({
-      stop_id: stop.stop_id,
+      stop_id: Number(stop.stop_id),
       stop_code: stop.stop_code,
-      stop_lat: stop.stop_lat,
-      stop_lon: stop.stop_lon,
+      stop_lat: Number(stop.stop_lat),
+      stop_lon: Number(stop.stop_lon),
       stop_name: stop.stop_name,
-    }));
+    }))
+    .sort((a, b) => stopIds.indexOf(a.stop_id) - stopIds.indexOf(b.stop_id));
 
   useRouteStore.setState({ [routeId]: stopsForRoute });
   // Return the stop data for the given route ID

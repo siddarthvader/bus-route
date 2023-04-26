@@ -4,7 +4,7 @@ import {
   RouteStore,
   ScheduleObject,
   ScheduleStore,
-  SpatialEntity,
+  StopsEntity,
   URLStore,
 } from "../helpers/types";
 
@@ -12,7 +12,7 @@ const useRouteStore = create<RouteStore>((set, get) => ({
   selectedRoute: "",
   routeData: [],
   setRoute: (route: string) => set(() => ({ selectedRoute: route })),
-  setRouteData: (routeData: SpatialEntity[]) =>
+  setRouteData: (routeData: StopsEntity[]) =>
     set(() => ({
       routeData: routeData,
     })),
