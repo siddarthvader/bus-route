@@ -40,7 +40,7 @@ const columns = [
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("route_no", {
-    cell: (info) => <div>{info.getValue()}</div>,
+    cell: (info) => <div>{info.getValue().toUpperCase()}</div>,
   }),
   columnHelper.accessor("trip_end_time", {
     cell: (info) => <div>{info.getValue()}</div>,
