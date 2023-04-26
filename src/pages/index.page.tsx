@@ -4,7 +4,7 @@ import RouteTable from "../components/RouteTable";
 import Header from "../components/Header";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useScheduleStore, useURLStore } from "@/store/store";
+import { useURLStore } from "@/store/store";
 
 const MapComponent = dynamic(() => import("src/components/MapComponent.tsx"), {
   ssr: false,

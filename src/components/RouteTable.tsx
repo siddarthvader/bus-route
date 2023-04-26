@@ -17,7 +17,7 @@ import {
   RouteTableRow,
   ScheduleObject,
 } from "../helpers/types";
-import { getStopsForRouteId, readGSTFile } from "../helpers/api";
+import { readGSTFile } from "../helpers/api";
 import { EnableFilter, GTFSConfig, MapGTFSHeaders } from "../helpers/constants";
 import { useScheduleStore, useURLStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";

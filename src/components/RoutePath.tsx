@@ -3,15 +3,15 @@ import React from "react";
 import { CircleMarker, Marker, Polyline, Tooltip } from "react-leaflet";
 
 type RoutePathProps = {
-  sortedRoute: StopsEntity[];
+  routeData: StopsEntity[];
 };
 
 function RoutePath(props: RoutePathProps) {
-  const { sortedRoute } = props;
+  const { routeData } = props;
 
   return (
     <>
-      {sortedRoute.map((stop, index) => (
+      {routeData.map((stop, index) => (
         <div key={"wrapper_" + index}>
           {index === 0 ? (
             <Marker
@@ -34,8 +34,8 @@ function RoutePath(props: RoutePathProps) {
             positions={[
               [stop.stop_lat, stop.stop_lon],
               [
-                sortedRoute[index + 1]?.stop_lat ?? stop.stop_lat,
-                sortedRoute[index + 1]?.stop_lon ?? stop.stop_lon,
+                routeData[index + 1]?.stop_lat ?? stop.stop_lat,
+                routeData[index + 1]?.stop_lon ?? stop.stop_lon,
               ],
             ]}
           >
@@ -44,7 +44,7 @@ function RoutePath(props: RoutePathProps) {
               <div>Stop Name: {stop.stop_name}</div>
             </Tooltip>
           </Polyline>
-          {index === sortedRoute.length - 1 ? (
+          {index === routeData.length - 1 ? (
             <Marker
               key={"stop_" + index}
               position={[stop.stop_lat, stop.stop_lon]}

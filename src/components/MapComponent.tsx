@@ -12,7 +12,7 @@ import {
   MapRef,
   StopsEntity,
 } from "../helpers/types";
-import { useRouteStore } from "../store/store";
+import { useRouteStore, useStopsStore } from "../store/store";
 
 import { getStopsForRouteId } from "@/helpers/api";
 
@@ -22,6 +22,7 @@ import MapBreadCrumb from "./MapBreadCrumb";
 import MapControls from "./MapControls";
 
 import RoutePath from "./RoutePath";
+import StopsMarker from "./StopsMarker";
 
 const {
   id,
@@ -36,15 +37,15 @@ const {
 export default function MapComponent() {
   const router = useRouter();
   const routeData = useRouteStore((state) => state.routeData);
+  const rangeList = useRouteStore((state) => state.getRangeLabel());
+  const stopsData = useStopsStore((state) => state.stopsData);
+  const setRouteData = useRouteStore((state) => state.setRouteData);
+  const setStops = useStopsStore((state) => state.setStops);
 
   const selectedRoute = router.query.route_id as string;
 
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
-
-  const rangeList = useRouteStore((state) => state.getRangeLabel());
-
-  const setRouteData = useRouteStore((state) => state.setRouteData);
 
   useEffect(() => {
     if (routeData.length) {
@@ -61,18 +62,13 @@ export default function MapComponent() {
     console.log(val);
   }
 
-  const [sortedRoute, setSortedRoute] = useState<StopsEntity[]>([]);
-
   useEffect(() => {
     getStopsForRouteId(
       router.query.route_id as string,
       router.query.agency_id as string
-    ).then((res) => {
-      setRouteData(res);
-
-      console.log({ res });
-
-      setSortedRoute(res);
+    ).then(([routeStops, allStops]) => {
+      setRouteData(routeStops);
+      setStops(allStops);
     });
   }, [router.query]);
 
@@ -99,8 +95,8 @@ export default function MapComponent() {
             bounds={MapBoundsMax}
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
-
-          <RoutePath sortedRoute={sortedRoute} />
+          <StopsMarker stopsData={stopsData} />
+          <RoutePath routeData={routeData} />
         </MapContainer>
       </div>
       {selectedRoute && (

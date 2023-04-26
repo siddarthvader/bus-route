@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { generateTimeArray, trimLatLang } from "../helpers/util";
+import { generateTimeArray } from "../helpers/util";
 import {
   RouteStore,
   ScheduleObject,
@@ -49,4 +49,14 @@ const useURLStore = create<URLStore>((set, get) => ({
   },
 }));
 
-export { useScheduleStore, useURLStore, useRouteStore };
+type StopsStore = {
+  stopsData: StopsEntity[];
+  setStops: (stopsData: StopsEntity[]) => void;
+};
+
+const useStopsStore = create<StopsStore>((set, get) => ({
+  stopsData: [],
+  setStops: (stopsData: StopsEntity[]) => set(() => ({ stopsData })),
+}));
+
+export { useScheduleStore, useURLStore, useRouteStore, useStopsStore };

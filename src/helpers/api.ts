@@ -1,6 +1,5 @@
 import { useRouteStore, useURLStore } from "@/store/store";
-import { RouteHandlerManager } from "next/dist/server/future/route-handler-managers/route-handler-manager";
-import * as Papa from "papaparse";
+
 import {
   MapGTFSToRouteHeaders,
   MapGTFSToStopTimeHeaders,
@@ -43,7 +42,7 @@ const readGSTFile = async <MappingType, ResultType>(
 async function getStopsForRouteId(
   routeName: string,
   agencyId: string
-): Promise<StopsEntity[]> {
+): Promise<[StopsEntity[], StopsEntity[]]> {
   // Load the necessary data from the GTFS static feed
 
   const [routesData, tripsData, stopTimesData, stopsData] = await Promise.all([
@@ -95,10 +94,18 @@ async function getStopsForRouteId(
     }))
     .sort((a, b) => stopIds.indexOf(a.stop_id) - stopIds.indexOf(b.stop_id));
 
-  useRouteStore.setState({ [routeId]: stopsForRoute });
+  // can optimize this function laters
+  const finalstopsData: StopsEntity[] = stopsData.map((stop) => ({
+    stop_id: Number(stop.stop_id),
+    stop_code: stop.stop_code,
+    stop_lat: Number(stop.stop_lat),
+    stop_lon: Number(stop.stop_lon),
+    stop_name: stop.stop_name,
+  }));
+
   // Return the stop data for the given route ID
 
-  return stopsForRoute;
+  return [stopsForRoute, finalstopsData];
 }
 
 export { readGSTFile, getStopsForRouteId };
