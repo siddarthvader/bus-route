@@ -66,7 +66,7 @@ const columns = [
                 pathname: "/",
                 query: {
                   agency_id: useURLStore.getState().agency_id,
-                  route_id: selectedRoute,
+                  route_id: selectedRoute.toUpperCase(),
                 },
               });
             }}
