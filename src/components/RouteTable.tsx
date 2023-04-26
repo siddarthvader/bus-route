@@ -96,8 +96,6 @@ function RouteTable() {
     );
   }, []);
 
-  // console.log("header.column.getCanFilter()", header.column.getCanFilter());
-
   return (
     <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
       <div className="flex items-center justify-end px-4 space-x-2">

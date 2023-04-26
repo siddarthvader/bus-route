@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { trimLatLang } from "../helpers/helper";
+import { generateTimeArray, trimLatLang } from "../helpers/util";
 import {
   RouteStore,
   ScheduleObject,
@@ -23,14 +23,7 @@ const useRouteStore = create<RouteStore>((set, get) => ({
     })),
 
   getRangeLabel: () => {
-    const data = get().routeData;
-    let result: number[] = [];
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i];
-
-      result.push(Date.parse(item["@timestamp"]));
-    }
-
+    const result = generateTimeArray("12:00:00", "24:00:00");
     return result;
   },
   activeSpatial: 0,

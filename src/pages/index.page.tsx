@@ -16,7 +16,6 @@ export default function Home() {
   const setAgencyId = useURLStore((state) => state.setAgencyId);
 
   useEffect(() => {
-    console.log("seting agency id", router.query.agency_id);
     setAgencyId(router.query.agency_id as string);
   }, [router.query]);
 

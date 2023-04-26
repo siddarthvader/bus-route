@@ -107,8 +107,6 @@ export type MapGstfToSchedule = {
 };
 
 export type MapControlProps = {
-  start_time: string;
-  end_time: string;
   rangeList: number[];
   onTimeChange: (val: number) => void;
 };

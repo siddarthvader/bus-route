@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { DefaultMapConfig, LMapState, MapRef } from "../helpers/types";
 import { useRouteStore } from "../store/store";
 import { LatLngExpression } from "leaflet";
-import { trimLatLang } from "../helpers/helper";
+import { generateTimeArray, trimLatLang } from "../helpers/util";
 import MapControls from "./MapControls";
 import L from "leaflet";
 import MapBreadCrumb from "./MapBreadCrumb";
@@ -26,13 +26,13 @@ const {
 export default function MapComponent() {
   const routeData = useRouteStore((state) => state.routeData);
   const selectedRoute = useRouteStore((state) => state.selectedRoute);
-  const getBusLocation = useRouteStore().getBusLocation;
 
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
+  const rangeList = useRouteStore((state) => state.getRangeLabel());
+
   useEffect(() => {
-    console.log(routeData);
     if (routeData.length) {
       const flyTo: LatLngExpression = {
         lat: Number(routeData[0].stop_lat),
@@ -81,9 +81,7 @@ export default function MapComponent() {
       {selectedRoute && (
         <>
           <MapControls
-            start_time=""
-            end_time=""
-            rangeList={[]}
+            rangeList={rangeList}
             onTimeChange={onMapControlChange}
           />
           <MapBreadCrumb />

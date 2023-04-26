@@ -14,9 +14,12 @@ import {
   MapControlProps,
   PlayPauseButtonProps,
 } from "@/helpers/types";
+import { getHoursMinutes } from "@/helpers/util";
 
 export default function MapControls(props: MapControlProps) {
-  const { start_time, end_time, onTimeChange, rangeList } = props;
+  const { onTimeChange, rangeList } = props;
+  const start_time = getHoursMinutes(new Date(rangeList[0]));
+  const end_time = getHoursMinutes(new Date(rangeList[rangeList.length - 1]));
 
   const [isPlaying, setPlaying] = useState(false);
 
@@ -26,6 +29,8 @@ export default function MapControls(props: MapControlProps) {
   const increaseActiveSpatial = useRouteStore().increaseActiveSpatial;
 
   const intervalRef = useRef(null);
+  const now = useRef<Date>(new Date());
+
   function togglePlay() {
     if (isPlaying) {
       clearInterval(intervalRef.current);
@@ -39,12 +44,15 @@ export default function MapControls(props: MapControlProps) {
   }
 
   return (
-    <div className="  rounded-lg bg-white shadow-lg z-[1000] absolute bottom-2 left-[30%] py-2 px-4">
+    <div
+      className=" rounded-lg bg-white shadow-lg z-[1000] absolute bottom-2 left-[20%] py-2 px-4"
+      style={{ width: rangeList.length * 69 }}
+    >
       <div className="flex items-center justify-between">
         <div className="mr-4 font-semibold text-zinc-600">
-          {start_time} -{end_time}
+          {now.current.toDateString()} : {start_time} - {end_time}
         </div>
-        <div className="flex flex-1">
+        <div className="flex ">
           <BackwardButton onClick={() => setActiveSpatial(activeSpatial - 1)} />
           <PlayPauseButton onClick={() => togglePlay()} isPlaying={isPlaying} />
           <ForwardButton onClick={() => increaseActiveSpatial()} />

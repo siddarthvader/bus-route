@@ -1,21 +1,22 @@
 import { useMemo, useState } from "react";
-import { getAxisLabelFromTime } from "../helpers/helper";
+import { getAxisLabelFromTime, getHoursMinutes } from "../helpers/util";
 
 interface RangeSliderProps {
   step: number;
-  rangeList: number[];
   onValueChange?: (value: number) => void;
+  rangeList: number[];
 }
 
 function RangeSlider(props: RangeSliderProps) {
-  const minValue = 0;
-  const maxValue = props.rangeList.length - 1;
+  const { rangeList } = props;
+  const minValue = Math.min(...rangeList);
+  const maxValue = Math.max(...rangeList);
 
   const [value, setValue] = useState(minValue);
 
   const range: Date[] = useMemo(
-    () => getAxisLabelFromTime(props.rangeList),
-    [props.rangeList]
+    () => getAxisLabelFromTime(rangeList),
+    [rangeList]
   );
 
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +53,7 @@ function RangeSlider(props: RangeSliderProps) {
                   transform: "translateX(-50%) translateY(-100%)",
                 }}
               >
-                {label.toLocaleTimeString()}
+                {getHoursMinutes(label)}
               </div>
             ))}
           </div>
