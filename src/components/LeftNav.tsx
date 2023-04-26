@@ -4,7 +4,7 @@ import readCSVFile from "../helpers/csvParser";
 import { useSpatialStore } from "@/store/store";
 
 function LeftNav() {
-  const setSpatialData = useSpatialStore((state) => state.setSpatialData);
+  const setRouteData = useSpatialStore((state) => state.setRouteData);
   const selectedRoute = useSpatialStore((state) => state.selectedRoute);
   const setSelectedRoute = useSpatialStore((state) => state.setRoute);
 
@@ -12,7 +12,7 @@ function LeftNav() {
     readCSVFile(filepath)
       .then((rows) => {
         setSelectedRoute(filepath);
-        setSpatialData(rows.data);
+        setRouteData(rows.data);
       })
       .catch((error) => {
         console.error(error);

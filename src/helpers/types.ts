@@ -1,5 +1,4 @@
 import { LatLngExpression, Map, TileLayer } from "leaflet";
-import internal from "stream";
 
 export interface LMapState {
   target: LeafletMap | null;
@@ -21,24 +20,17 @@ export type DefaultMapConfig = {
   initialCenter: LatLngExpression;
 };
 
-export type SpatialStore = {
+export type RouteStore = {
   selectedRoute: string;
-  spatialData: SpatialEntity[];
+  routeData: StopsEntity[];
   setRoute: (route: string) => void;
-  setSpatialData: (spatialData: SpatialEntity[]) => void;
+  setRouteData: (spatialData: StopsEntity[]) => void;
   getRangeLabel: () => number[];
   activeSpatial: number;
   setActiveSpatial: (activeSpatial: number) => void;
   increaseActiveSpatial: () => void;
   getBusLocation: () => LatLngExpression | null;
   isLastSpatial: () => Boolean;
-};
-
-export type SpatialEntity = {
-  "@timestamp": string;
-  "route_info.location": string;
-  "route_info.timestamp": string;
-  "route_info.vid": string;
 };
 
 export type ScheduleStore = {
@@ -85,6 +77,8 @@ export type StopsGstfTextHeaders = {
   zone_id: string;
 };
 
+export interface StopsEntity extends Omit<StopsGstfTextHeaders, "zone_id"> {}
+
 export type RouteGsftTextHeaders = {
   agency_id: string;
   route_id: string;
@@ -110,4 +104,28 @@ export type StopTimeGsftTextHeaders = {
 
 export type MapGstfToSchedule = {
   [K in keyof GstfTextHeaders]: string;
+};
+
+export type MapControlProps = {
+  start_time: string;
+  end_time: string;
+  rangeList: number[];
+  onTimeChange: (val: number) => void;
+};
+
+export type ForWardButtonProps = {
+  onClick: () => void;
+};
+export type BackwardButtonProps = {
+  onClick: () => void;
+};
+
+export type PlayPauseButtonProps = {
+  onClick: () => void;
+  isPlaying: boolean;
+};
+
+export type Label = {
+  label: string;
+  value: number;
 };

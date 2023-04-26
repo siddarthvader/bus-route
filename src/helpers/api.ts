@@ -1,4 +1,4 @@
-import { useURLStore } from "@/store/store";
+import { useRouteStore, useURLStore } from "@/store/store";
 import { RouteHandlerManager } from "next/dist/server/future/route-handler-managers/route-handler-manager";
 import * as Papa from "papaparse";
 import {
@@ -10,6 +10,7 @@ import {
 import {
   RouteGsftTextHeaders,
   StopTimeGsftTextHeaders,
+  StopsEntity,
   StopsGstfTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
@@ -35,10 +36,14 @@ const readGSTFile = async <MappingType, ResultType>(
       result.push(obj as ResultType);
     }
   }
+
   return result;
 };
 
-async function getStopsForRouteId(routeName: string, agencyId: string) {
+async function getStopsForRouteId(
+  routeName: string,
+  agencyId: string
+): Promise<StopsEntity[]> {
   // Load the necessary data from the GTFS static feed
 
   const [routesData, tripsData, stopTimesData, stopsData] = await Promise.all([
@@ -60,15 +65,12 @@ async function getStopsForRouteId(routeName: string, agencyId: string) {
     ),
   ]);
 
-  console.log({ routesData, routeName, agencyId });
-
   const routeId =
     routesData.filter(
       (item) =>
         item.route_long_name === routeName && item.agency_id === agencyId
     )[0]?.route_id || "";
 
-  console.log(routeId);
   // Find the trip IDs for the given route ID
   const tripIds = tripsData
     .filter((trip) => trip.route_id === routeId)
@@ -88,9 +90,10 @@ async function getStopsForRouteId(routeName: string, agencyId: string) {
       stop_lon: stop.stop_lon,
       stop_name: stop.stop_name,
     }));
+
+  useRouteStore.setState({ [routeId]: stopsForRoute });
   // Return the stop data for the given route ID
 
-  console.log(stopsForRoute);
   return stopsForRoute;
 }
 

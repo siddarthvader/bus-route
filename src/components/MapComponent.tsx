@@ -6,7 +6,7 @@ import {
 } from "../helpers/constants";
 import { useEffect, useRef, useState } from "react";
 import { DefaultMapConfig, LMapState, MapRef } from "../helpers/types";
-import { useSpatialStore } from "../store/store";
+import { useRouteStore } from "../store/store";
 import { LatLngExpression } from "leaflet";
 import { trimLatLang } from "../helpers/helper";
 import MapControls from "./MapControls";
@@ -23,27 +23,33 @@ const {
 }: DefaultMapConfig = defaultMapConfigOption;
 
 export default function MapComponent() {
-  const spatialData = useSpatialStore((state) => state.spatialData);
-  const selectedRoute = useSpatialStore((state) => state.selectedRoute);
-  const getBusLocation = useSpatialStore().getBusLocation;
+  const routeData = useRouteStore((state) => state.routeData);
+  const selectedRoute = useRouteStore((state) => state.selectedRoute);
+  const getBusLocation = useRouteStore().getBusLocation;
 
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
   useEffect(() => {
-    if (spatialData.length) {
-      const flyTo: LatLngExpression = trimLatLang(
-        spatialData[0]["route_info.location"]
-      ) || { lat: 0, lng: 0 };
+    console.log(routeData);
+    if (routeData.length) {
+      const flyTo: LatLngExpression = {
+        lat: Number(routeData[0].stop_lat),
+        lng: Number(routeData[0].stop_lon),
+      };
 
       map?.target?.flyTo(flyTo, 12);
     }
-  }, [spatialData, map?.target]);
+  }, [routeData, map?.target]);
 
   const myIcon = L.icon({
     iconUrl: "/bus.png",
     iconSize: [32, 32],
   });
+
+  function onMapControlChange(val: number) {
+    console.log(val);
+  }
 
   return (
     <div className="relative flex h-[70%]">
@@ -71,7 +77,14 @@ export default function MapComponent() {
           {/* <Marker position={getBusLocation() || [0, 0]} icon={myIcon} /> */}
         </MapContainer>
       </div>
-      {selectedRoute && <MapControls />}
+      {selectedRoute && (
+        <MapControls
+          start_time=""
+          end_time=""
+          rangeList={[]}
+          onTimeChange={onMapControlChange}
+        />
+      )}
     </div>
   );
 }

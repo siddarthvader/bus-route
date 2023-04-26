@@ -18,7 +18,7 @@ import {
 } from "../helpers/types";
 import { getStopsForRouteId, readGSTFile } from "../helpers/api";
 import { EnableFilter, GTFSConfig, MapGstfHeaders } from "../helpers/constants";
-import { useScheduleStore, useURLStore } from "../store/store";
+import { useRouteStore, useScheduleStore, useURLStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
@@ -48,12 +48,16 @@ const columns = [
       <div className="">
         <button
           className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
-          onClick={(e) =>
-            getStopsForRouteId(
-              info.row.getValue("route_no"),
+          onClick={async (e) => {
+            const selectedRoute: string = info.row.getValue("route_no");
+            const routeData = await getStopsForRouteId(
+              selectedRoute,
               useURLStore.getState().agency_id
-            )
-          }
+            );
+
+            useRouteStore.setState({ selectedRoute });
+            useRouteStore.setState({ routeData });
+          }}
         >
           Get Route
         </button>
@@ -69,10 +73,6 @@ function RouteTable() {
   const [filepath] = useState<string>(GTFSConfig.url);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  const agency_id = useURLStore<string>((state) => state.agency_id);
-
-  // console.log({ agency_id });
 
   const table = useReactTable<RouteTableRow>({
     columns,

@@ -1,20 +1,20 @@
 import { create } from "zustand";
 import { trimLatLang } from "../helpers/helper";
 import {
+  RouteStore,
   ScheduleObject,
   ScheduleStore,
   SpatialEntity,
-  SpatialStore,
   URLStore,
 } from "../helpers/types";
 
-const useSpatialStore = create<SpatialStore>((set, get) => ({
+const useRouteStore = create<RouteStore>((set, get) => ({
   selectedRoute: "",
-  spatialData: [],
+  routeData: [],
   setRoute: (route: string) => set(() => ({ selectedRoute: route })),
-  setSpatialData: (spatialData: SpatialEntity[]) =>
+  setRouteData: (spatialData: SpatialEntity[]) =>
     set(() => ({
-      spatialData: spatialData
+      routeData: spatialData
         .filter((item) => item["@timestamp"])
         .sort(
           (first, second) =>
@@ -23,7 +23,7 @@ const useSpatialStore = create<SpatialStore>((set, get) => ({
     })),
 
   getRangeLabel: () => {
-    const data = get().spatialData;
+    const data = get().routeData;
     let result: number[] = [];
     for (let i = 0; i < data.length; i++) {
       const item = data[i];
@@ -45,7 +45,7 @@ const useSpatialStore = create<SpatialStore>((set, get) => ({
     }
   },
   getBusLocation: () => {
-    const data = get().spatialData;
+    const data = get().routeData;
 
     if (data.length == 0) {
       return null;
@@ -54,7 +54,7 @@ const useSpatialStore = create<SpatialStore>((set, get) => ({
     return trimLatLang(data[get().activeSpatial]["route_info.location"]);
   },
   isLastSpatial: () => {
-    return get().spatialData.length - 1 <= get().activeSpatial;
+    return get().routeData.length - 1 <= get().activeSpatial;
   },
 }));
 
@@ -70,4 +70,4 @@ const useURLStore = create<URLStore>((set, get) => ({
   },
 }));
 
-export { useSpatialStore, useScheduleStore, useURLStore };
+export { useScheduleStore, useURLStore, useRouteStore };
