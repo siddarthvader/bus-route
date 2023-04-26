@@ -2,16 +2,16 @@ import { useRouteStore, useURLStore } from "@/store/store";
 import { RouteHandlerManager } from "next/dist/server/future/route-handler-managers/route-handler-manager";
 import * as Papa from "papaparse";
 import {
-  MapGstfToRouteHeaders,
-  MapGstfToStopTimeHeaders,
-  MapGstfToStopsHeaders,
-  MapGstfToTripHeaders,
+  MapGTFSToRouteHeaders,
+  MapGTFSToStopTimeHeaders,
+  MapGTFSToStopsHeaders,
+  MapGTFSToTripHeaders,
 } from "./constants";
 import {
   RouteGsftTextHeaders,
   StopTimeGsftTextHeaders,
   StopsEntity,
-  StopsGstfTextHeaders,
+  StopsGTFSTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
 
@@ -49,19 +49,19 @@ async function getStopsForRouteId(
   const [routesData, tripsData, stopTimesData, stopsData] = await Promise.all([
     readGSTFile<RouteGsftTextHeaders, RouteGsftTextHeaders>(
       "routes.txt",
-      MapGstfToRouteHeaders
+      MapGTFSToRouteHeaders
     ),
     readGSTFile<TripGsftTextHeaders, TripGsftTextHeaders>(
       "trips.txt",
-      MapGstfToTripHeaders
+      MapGTFSToTripHeaders
     ),
     readGSTFile<StopTimeGsftTextHeaders, StopTimeGsftTextHeaders>(
       "stop_times.txt",
-      MapGstfToStopTimeHeaders
+      MapGTFSToStopTimeHeaders
     ),
-    readGSTFile<StopsGstfTextHeaders, StopsGstfTextHeaders>(
+    readGSTFile<StopsGTFSTextHeaders, StopsGTFSTextHeaders>(
       "stops.txt",
-      MapGstfToStopsHeaders
+      MapGTFSToStopsHeaders
     ),
   ]);
 

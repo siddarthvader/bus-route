@@ -13,12 +13,12 @@ import {
   CellContext as TanCellContext,
 } from "@tanstack/react-table";
 import {
-  GstfTextHeaders,
+  GTFSTextHeaders,
   RouteTableRow,
   ScheduleObject,
 } from "../helpers/types";
 import { getStopsForRouteId, readGSTFile } from "../helpers/api";
-import { EnableFilter, GTFSConfig, MapGstfHeaders } from "../helpers/constants";
+import { EnableFilter, GTFSConfig, MapGTFSHeaders } from "../helpers/constants";
 import { useScheduleStore, useURLStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
 import { Router, useRouter } from "next/router";
@@ -103,7 +103,7 @@ function RouteTable() {
   });
 
   useEffect(() => {
-    readGSTFile<GstfTextHeaders, ScheduleObject>(filepath, MapGstfHeaders).then(
+    readGSTFile<GTFSTextHeaders, ScheduleObject>(filepath, MapGTFSHeaders).then(
       (data) => {
         setRouteList(data);
       }

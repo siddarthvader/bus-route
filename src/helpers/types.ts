@@ -58,7 +58,7 @@ export type ScheduleObject = {
 
 export interface RouteTableRow extends ScheduleObject {}
 
-export type GstfTextHeaders = {
+export type GTFSTextHeaders = {
   "Duty ID": string;
   "Plate No.": string;
   "Route No.": string;
@@ -67,7 +67,7 @@ export type GstfTextHeaders = {
   "Trip Number": string;
 };
 
-export type StopsGstfTextHeaders = {
+export type StopsGTFSTextHeaders = {
   stop_id: string;
   stop_code: string;
   stop_name: string;
@@ -109,8 +109,8 @@ export type StopTimeGsftTextHeaders = {
   stop_sequence: string;
 };
 
-export type MapGstfToSchedule = {
-  [K in keyof GstfTextHeaders]: string;
+export type MapGTFSToSchedule = {
+  [K in keyof GTFSTextHeaders]: string;
 };
 
 export type MapControlProps = {

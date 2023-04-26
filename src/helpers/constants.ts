@@ -1,10 +1,10 @@
 import { BoundsLiteral, PointTuple } from "leaflet";
 import {
   DefaultMapConfig,
-  MapGstfToSchedule,
+  MapGTFSToSchedule,
   RouteGsftTextHeaders,
   StopTimeGsftTextHeaders,
-  StopsGstfTextHeaders,
+  StopsGTFSTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
 
@@ -45,7 +45,7 @@ export const GTFSConfig = {
   url: "depot_tool_duty_master.txt",
 };
 
-export const MapGstfHeaders: MapGstfToSchedule = {
+export const MapGTFSHeaders: MapGTFSToSchedule = {
   "Duty ID": "duty_id",
   "Plate No.": "plate_no",
   "Route No.": "route_no",
@@ -54,7 +54,7 @@ export const MapGstfHeaders: MapGstfToSchedule = {
   "Trip Number": "trip_number",
 };
 
-export const MapGstfToStopsHeaders: StopsGstfTextHeaders = {
+export const MapGTFSToStopsHeaders: StopsGTFSTextHeaders = {
   stop_id: "stop_id",
   stop_code: "stop_code",
   stop_name: "stop_name",
@@ -63,7 +63,7 @@ export const MapGstfToStopsHeaders: StopsGstfTextHeaders = {
   zone_id: "zone_id",
 };
 
-export const MapGstfToRouteHeaders: RouteGsftTextHeaders = {
+export const MapGTFSToRouteHeaders: RouteGsftTextHeaders = {
   agency_id: "agency_id",
   route_id: "route_id",
   route_long_name: "route_long_name",
@@ -71,14 +71,14 @@ export const MapGstfToRouteHeaders: RouteGsftTextHeaders = {
   route_type: "route_type",
 };
 
-export const MapGstfToTripHeaders: TripGsftTextHeaders = {
+export const MapGTFSToTripHeaders: TripGsftTextHeaders = {
   route_id: "route_id",
   service_id: "service_id",
   trip_id: "trip_id",
   shape_id: "shape_id",
 };
 
-export const MapGstfToStopTimeHeaders: StopTimeGsftTextHeaders = {
+export const MapGTFSToStopTimeHeaders: StopTimeGsftTextHeaders = {
   trip_id: "trip_id",
   arrival_time: "arrival_time",
   departure_time: "departure_time",
