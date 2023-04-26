@@ -1,6 +1,6 @@
 import { StopsEntity } from "@/helpers/types";
 import React from "react";
-import { Circle, Marker, Rectangle } from "react-leaflet";
+import { Circle, Marker, Rectangle, Tooltip } from "react-leaflet";
 
 type StopsMarkerProps = {
   stopsData: StopsEntity[];
@@ -20,7 +20,12 @@ function StopsMarker(props: StopsMarkerProps) {
             center={[stop.stop_lat, stop.stop_lon]}
             radius={1}
             color="red"
-          />
+          >
+            <Tooltip>
+              <div>Stop Id: {stop.stop_id}</div>
+              <div>Stop Name: {stop.stop_name}</div>
+            </Tooltip>
+          </Circle>
         );
       })}
     </div>
