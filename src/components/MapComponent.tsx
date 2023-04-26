@@ -1,17 +1,20 @@
+import { LatLngExpression } from "leaflet";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import {
   MapBoundsMax,
   MapboxConfig,
   defaultMapConfigOption,
 } from "../helpers/constants";
-import { useEffect, useRef, useState } from "react";
 import { DefaultMapConfig, LMapState, MapRef } from "../helpers/types";
 import { useRouteStore } from "../store/store";
-import { LatLngExpression } from "leaflet";
-import { generateTimeArray, trimLatLang } from "../helpers/util";
-import MapControls from "./MapControls";
+
+import { createControlComponent } from "@react-leaflet/core";
 import L from "leaflet";
+import "leaflet-routing-machine";
 import MapBreadCrumb from "./MapBreadCrumb";
+import MapControls from "./MapControls";
+import RoutingMachine from "./RoutingMachine";
 
 const {
   id,
@@ -48,6 +51,8 @@ export default function MapComponent() {
     iconSize: [32, 32],
   });
 
+  console.log("routeData", routeData);
+
   function onMapControlChange(val: number) {
     console.log(val);
   }
@@ -75,6 +80,7 @@ export default function MapComponent() {
             bounds={MapBoundsMax}
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
+          {selectedRoute && routeData.length > 0 && <RoutingMachine />}
           {/* <Marker position={getBusLocation() || [0, 0]} icon={myIcon} /> */}
         </MapContainer>
       </div>

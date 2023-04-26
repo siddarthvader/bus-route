@@ -27,6 +27,7 @@
     "fs": "0.0.1-security",
     "gtfs-realtime-bindings": "^1.1.1",
     "leaflet": "^1.9.3",
+    "leaflet-routing-machine": "^3.2.12",
     "moment": "^2.29.4",
     "next": "13.3.0",
     "papaparse": "^5.4.1",

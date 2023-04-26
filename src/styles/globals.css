@@ -43,3 +43,7 @@ thead {
     100% - 1em
   ); /* scrollbar is average 1em/16px width, remove it from thead width */
 }
+
+.leaflet-routing-alt {
+  display: none;
+}

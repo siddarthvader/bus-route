@@ -20,7 +20,6 @@ function trimLatLang(point: string): LatLngExpression | null {
 
 function getAxisLabelFromTime(timestamps: number[]): Date[] {
   return timestamps.map((item) => {
-    console.log({ item });
     return new Date(item);
   });
 }
