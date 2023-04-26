@@ -11,6 +11,7 @@ import { LatLngExpression } from "leaflet";
 import { trimLatLang } from "../helpers/helper";
 import MapControls from "./MapControls";
 import L from "leaflet";
+import MapBreadCrumb from "./MapBreadCrumb";
 
 const {
   id,
@@ -78,12 +79,15 @@ export default function MapComponent() {
         </MapContainer>
       </div>
       {selectedRoute && (
-        <MapControls
-          start_time=""
-          end_time=""
-          rangeList={[]}
-          onTimeChange={onMapControlChange}
-        />
+        <>
+          <MapControls
+            start_time=""
+            end_time=""
+            rangeList={[]}
+            onTimeChange={onMapControlChange}
+          />
+          <MapBreadCrumb />
+        </>
       )}
     </div>
   );
