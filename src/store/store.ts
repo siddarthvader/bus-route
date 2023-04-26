@@ -12,14 +12,9 @@ const useRouteStore = create<RouteStore>((set, get) => ({
   selectedRoute: "",
   routeData: [],
   setRoute: (route: string) => set(() => ({ selectedRoute: route })),
-  setRouteData: (spatialData: SpatialEntity[]) =>
+  setRouteData: (routeData: SpatialEntity[]) =>
     set(() => ({
-      routeData: spatialData
-        .filter((item) => item["@timestamp"])
-        .sort(
-          (first, second) =>
-            Date.parse(first["@timestamp"]) - Date.parse(second["@timestamp"])
-        ),
+      routeData: routeData,
     })),
 
   getRangeLabel: () => {

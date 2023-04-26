@@ -69,19 +69,6 @@ const columns = [
                   route_id: selectedRoute,
                 },
               });
-
-              // info.router.
-
-              // useRouteStore.setState({ selectedRoute });
-              // useRouteStore.setState({ routeData });
-
-              // useRouter().push({
-              //   pathname: "/",
-              //   query: {
-              //     agency_id: useURLStore.getState().agency_id,
-              //     route_no: selectedRoute,
-              //   },
-              // });
             }}
           >
             Get Route

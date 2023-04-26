@@ -1,14 +1,22 @@
 import L from "leaflet";
 import { createControlComponent } from "@react-leaflet/core";
 import "leaflet-routing-machine";
-import { useRouteStore } from "@/store/store";
 
-const createRoutineMachineLayer = () => {
-  const routeData = useRouteStore.getState().routeData;
+type RouteMachineLayerProps = {
+  latlngList: number[][];
+};
+const createRoutineMachineLayer = (props: RouteMachineLayerProps) => {
+  const { latlngList } = props;
+
+  console.log({ latlngList });
   const instance = L.Routing.control({
-    waypoints: routeData.map((route) => {
-      return [Number(route.stop_lat), Number(route.stop_lon)];
-    }),
+    waypoints: [
+      L.latLng([latlngList[0][0], latlngList[0][1]]),
+      L.latLng([
+        latlngList[latlngList.length - 1][0],
+        latlngList[latlngList.length - 1][1],
+      ]),
+    ],
     lineOptions: {
       styles: [{ color: "#6FA1EC", weight: 4 }],
     },

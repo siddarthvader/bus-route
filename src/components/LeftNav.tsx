@@ -1,12 +1,11 @@
 import { RouteList } from "@/helpers/constants";
 import React from "react";
 import readCSVFile from "../helpers/csvParser";
-import { useSpatialStore } from "@/store/store";
+import { useRouteStore } from "@/store/store";
 
 function LeftNav() {
-  const setRouteData = useSpatialStore((state) => state.setRouteData);
-  const selectedRoute = useSpatialStore((state) => state.selectedRoute);
-  const setSelectedRoute = useSpatialStore((state) => state.setRoute);
+  const setRouteData = useRouteStore((state) => state.setRouteData);
+  const setSelectedRoute = useRouteStore((state) => state.setRoute);
 
   function loadCSV(filepath: string) {
     readCSVFile(filepath)

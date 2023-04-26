@@ -24,7 +24,7 @@ export type RouteStore = {
   selectedRoute: string;
   routeData: StopsEntity[];
   setRoute: (route: string) => void;
-  setRouteData: (spatialData: StopsEntity[]) => void;
+  setRouteData: (routeData: StopsEntity[]) => void;
   getRangeLabel: () => number[];
   activeSpatial: number;
   setActiveSpatial: (activeSpatial: number) => void;
