@@ -7,14 +7,15 @@ import {
   defaultMapConfigOption,
 } from "../helpers/constants";
 import { DefaultMapConfig, LMapState, MapRef } from "../helpers/types";
-import { useRouteStore } from "../store/store";
+import { useRouteStore, useURLStore } from "../store/store";
 
-import { createControlComponent } from "@react-leaflet/core";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import MapBreadCrumb from "./MapBreadCrumb";
 import MapControls from "./MapControls";
 import RoutingMachine from "./RoutingMachine";
+import { useRouter } from "next/router";
+import { getStopsForRouteId } from "@/helpers/api";
 
 const {
   id,
@@ -27,8 +28,13 @@ const {
 }: DefaultMapConfig = defaultMapConfigOption;
 
 export default function MapComponent() {
+  const router = useRouter();
   const routeData = useRouteStore((state) => state.routeData);
-  const selectedRoute = useRouteStore((state) => state.selectedRoute);
+  const selectedRoute = router.query.route_id as string;
+
+  console.log(router.query);
+
+  console.log({ selectedRoute });
 
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
@@ -51,11 +57,21 @@ export default function MapComponent() {
     iconSize: [32, 32],
   });
 
-  console.log("routeData", routeData);
-
   function onMapControlChange(val: number) {
     console.log(val);
   }
+
+  const setRouteData = useRouteStore((state) => state.setRouteData);
+
+  useEffect(() => {
+    getStopsForRouteId(
+      router.query.route_id as string,
+      router.query.agency_id as string
+    ).then((res) => {
+      setRouteData(res);
+      console.log(res);
+    });
+  }, [router.query]);
 
   return (
     <div className="relative flex h-[70%]">

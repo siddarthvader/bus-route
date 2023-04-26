@@ -10,6 +10,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
+  CellContext as TanCellContext,
 } from "@tanstack/react-table";
 import {
   GstfTextHeaders,
@@ -18,10 +19,18 @@ import {
 } from "../helpers/types";
 import { getStopsForRouteId, readGSTFile } from "../helpers/api";
 import { EnableFilter, GTFSConfig, MapGstfHeaders } from "../helpers/constants";
-import { useRouteStore, useScheduleStore, useURLStore } from "../store/store";
+import { useScheduleStore, useURLStore } from "../store/store";
 import ColumnFilter from "./ColumnFilter";
+import { Router, useRouter } from "next/router";
 
 const columnHelper = createColumnHelper<RouteTableRow>();
+
+type CellContext<TData extends RouteTableRow, TValue> = TanCellContext<
+  TData,
+  TValue
+> & {
+  router: Router;
+};
 
 const columns = [
   columnHelper.accessor("duty_id", {
@@ -44,29 +53,47 @@ const columns = [
   }),
   columnHelper.display({
     id: "actions",
-    cell: (info) => (
-      <div className="">
-        <button
-          className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
-          onClick={async (e) => {
-            const selectedRoute: string = info.row.getValue("route_no");
-            const routeData = await getStopsForRouteId(
-              selectedRoute,
-              useURLStore.getState().agency_id
-            );
+    cell: (info: unknown) => {
+      const infoCasted = info as CellContext<RouteTableRow, string>;
+      return (
+        <div className="">
+          <button
+            className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
+            onClick={async (e) => {
+              const selectedRoute: string = infoCasted.row.getValue("route_no");
 
-            useRouteStore.setState({ selectedRoute });
-            useRouteStore.setState({ routeData });
-          }}
-        >
-          Get Route
-        </button>
-      </div>
-    ),
+              infoCasted.router.push({
+                pathname: "/",
+                query: {
+                  agency_id: useURLStore.getState().agency_id,
+                  route_id: selectedRoute,
+                },
+              });
+
+              // info.router.
+
+              // useRouteStore.setState({ selectedRoute });
+              // useRouteStore.setState({ routeData });
+
+              // useRouter().push({
+              //   pathname: "/",
+              //   query: {
+              //     agency_id: useURLStore.getState().agency_id,
+              //     route_no: selectedRoute,
+              //   },
+              // });
+            }}
+          >
+            Get Route
+          </button>
+        </div>
+      );
+    },
   }),
 ];
 
 function RouteTable() {
+  const router = useRouter();
   const setRouteList = useScheduleStore((state) => state.setRouteList);
 
   const routeList = useScheduleStore((state) => state.routeList);
@@ -194,7 +221,11 @@ function RouteTable() {
                   key={cell.id}
                   className="p-2 text-xs break-words whitespace-normal"
                 >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {/* {flexRender(cell.column.columnDef.cell, cell.getContext())} */}
+                  {flexRender(cell.column.columnDef.cell, {
+                    ...cell.getContext(),
+                    router,
+                  })}
                 </td>
               ))}
             </tr>
