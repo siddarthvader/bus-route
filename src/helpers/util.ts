@@ -1,5 +1,5 @@
 import { LatLngExpression } from "leaflet";
-import { StopsEntity } from "./types";
+import { BusLocationRequestQuery, StopsEntity } from "./types";
 
 function trimLatLang(point: string): LatLngExpression | null {
   const regex: RegExp = /POINT \((\d+\.\d+) (\d+\.\d+)\)/;
@@ -68,9 +68,71 @@ function getHoursMinutes(date: Date) {
   });
 }
 
+function getBusLocationRequestQuery(
+  busIdList: string[],
+  startTime: string,
+  endTime: string,
+  type = "pb"
+): BusLocationRequestQuery {
+  return {
+    query: {
+      bool: {
+        must: [
+          {
+            terms: {
+              "route_info.vid": busIdList,
+            },
+          },
+          {
+            term: {
+              "route_info.type": type,
+            },
+          },
+          {
+            range: {
+              "route_info.timestamp": {
+                gte: startTime,
+                lte: endTime,
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+}
+
+function convertToISO(time, currentDate: Date) {
+  const inputTime = new Date(currentDate);
+  inputTime.setHours(
+    parseInt(time.slice(0, 2)),
+    parseInt(time.slice(3, 5)),
+    parseInt(time.slice(6, 8))
+  );
+  const offset = inputTime.getTimezoneOffset() * 60000;
+  const outputTime =
+    new Date(inputTime.getTime() - offset).toISOString().slice(0, -5) +
+    formatTimezoneOffset(offset);
+
+  return outputTime;
+}
+function formatTimezoneOffset(offset: number): string {
+  const sign = offset < 0 ? "-" : "+";
+  const absOffset = Math.abs(offset);
+  const hours = Math.floor(absOffset / 60);
+  const minutes = absOffset % 60;
+  return `${sign}${padZero(hours)}:${padZero(minutes)}`;
+}
+
+function padZero(num: number): string {
+  return num < 10 ? `0${num}` : num.toString();
+}
+
 export {
   trimLatLang,
   getAxisLabelFromTime,
   generateTimeArray,
   getHoursMinutes,
+  getBusLocationRequestQuery,
+  convertToISO,
 };

@@ -10,11 +10,12 @@ import {
   DefaultMapConfig,
   LMapState,
   MapRef,
+  RouterQueryParams,
   StopsEntity,
 } from "../helpers/types";
 import { useRouteStore, useStopsStore } from "../store/store";
 
-import { getStopsForRouteId } from "@/helpers/api";
+import { getBusLocations, getStopsForRouteId } from "@/helpers/api";
 
 import "leaflet-routing-machine";
 import { useRouter } from "next/router";
@@ -23,6 +24,8 @@ import MapControls from "./MapControls";
 
 import RoutePath from "./RoutePath";
 import StopsMarker from "./StopsMarker";
+import { convertToISO } from "@/helpers/util";
+import { start } from "repl";
 
 const {
   id,
@@ -63,13 +66,28 @@ export default function MapComponent() {
   }
 
   useEffect(() => {
-    getStopsForRouteId(
-      router.query.route_id as string,
-      router.query.agency_id as string
-    ).then(([routeStops, allStops]) => {
-      setRouteData(routeStops);
-      setStops(allStops);
-    });
+    const { route_id, agency_id, bus_id, start_time, end_time } =
+      router.query as RouterQueryParams;
+    getStopsForRouteId(route_id as string, agency_id as string).then(
+      ([routeStops, allStops]) => {
+        setRouteData(routeStops);
+        setStops(allStops);
+      }
+    );
+
+    if (bus_id && start_time && end_time) {
+      console.log(start_time, end_time);
+      const now = new Date();
+      const startTimeISO = convertToISO(start_time, now);
+      const endTimeISO = convertToISO(end_time, now);
+
+      console.log(startTimeISO, endTimeISO);
+      getBusLocations([bus_id], startTimeISO, endTimeISO).then(
+        (busLocations) => {
+          console.log(busLocations);
+        }
+      );
+    }
   }, [router.query]);
 
   return (
@@ -95,7 +113,7 @@ export default function MapComponent() {
             bounds={MapBoundsMax}
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
-          <StopsMarker stopsData={stopsData} />
+          {/* <StopsMarker stopsData={stopsData} /> */}
           <RoutePath routeData={routeData} />
         </MapContainer>
       </div>

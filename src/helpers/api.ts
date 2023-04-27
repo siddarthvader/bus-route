@@ -1,6 +1,5 @@
-import { useRouteStore, useURLStore } from "@/store/store";
-
 import {
+  ElasticAPIConfig,
   MapGTFSToRouteHeaders,
   MapGTFSToStopTimeHeaders,
   MapGTFSToStopsHeaders,
@@ -13,6 +12,7 @@ import {
   StopsGTFSTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
+import { getBusLocationRequestQuery } from "./util";
 
 const readGSTFile = async <MappingType, ResultType>(
   filepath: string,
@@ -108,4 +108,29 @@ async function getStopsForRouteId(
   return [stopsForRoute, finalstopsData];
 }
 
-export { readGSTFile, getStopsForRouteId };
+async function getBusLocations(
+  busIdList: string[],
+  startTime: string,
+  endTime: string
+) {
+  const requestQuery = getBusLocationRequestQuery(
+    busIdList,
+    startTime,
+    endTime
+  );
+
+  const response = await fetch(
+    `${ElasticAPIConfig.baseURL}/${ElasticAPIConfig.busLocationEndpoint}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestQuery),
+    }
+  );
+
+  console.log("response", response);
+  return response;
+}
+export { readGSTFile, getStopsForRouteId, getBusLocations };

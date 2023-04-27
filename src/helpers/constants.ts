@@ -89,3 +89,8 @@ export const MapGTFSToStopTimeHeaders: StopTimeGsftTextHeaders = {
 export const AgencyList = ["DIMTS", "DTC"];
 
 export const EnableFilter: string[] = ["plate_no"];
+
+export const ElasticAPIConfig = {
+  baseURL: "https://transops-api.chartr.in/api/v1",
+  busLocationEndpoint: "es/.ds-production-route-assignment-*",
+};

@@ -134,3 +134,38 @@ export type Label = {
   label: string;
   value: number;
 };
+
+export type BusLocationRequestQuery = {
+  query: {
+    bool: {
+      must: [
+        {
+          terms: {
+            "route_info.vid": string[];
+          };
+        },
+        {
+          term: {
+            "route_info.type": string;
+          };
+        },
+        {
+          range: {
+            "route_info.timestamp": {
+              gte: string;
+              lte: string;
+            };
+          };
+        }
+      ];
+    };
+  };
+};
+
+export type RouterQueryParams = {
+  agency_id: string;
+  route_id: string;
+  bus_id: string;
+  start_time: string;
+  end_time: string;
+};

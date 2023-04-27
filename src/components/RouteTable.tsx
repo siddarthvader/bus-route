@@ -42,10 +42,10 @@ const columns = [
   columnHelper.accessor("route_no", {
     cell: (info) => <div>{info.getValue().toUpperCase()}</div>,
   }),
-  columnHelper.accessor("trip_end_time", {
+  columnHelper.accessor("trip_start_time", {
     cell: (info) => <div>{info.getValue()}</div>,
   }),
-  columnHelper.accessor("trip_start_time", {
+  columnHelper.accessor("trip_end_time", {
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("trip_number", {
@@ -61,12 +61,19 @@ const columns = [
             className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
             onClick={async (e) => {
               const selectedRoute: string = infoCasted.row.getValue("route_no");
+              const selectedBus: string = infoCasted.row.getValue("plate_no");
 
+              const startTime: string =
+                infoCasted.row.getValue("trip_start_time");
+              const endTime: string = infoCasted.row.getValue("trip_end_time");
               infoCasted.router.push({
                 pathname: "/",
                 query: {
                   agency_id: useURLStore.getState().agency_id,
                   route_id: selectedRoute.toUpperCase(),
+                  bus_id: selectedBus,
+                  start_time: startTime,
+                  end_time: endTime,
                 },
               });
             }}
