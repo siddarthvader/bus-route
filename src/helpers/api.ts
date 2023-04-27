@@ -103,6 +103,8 @@ async function getStopsForRouteId(
     stop_name: stop.stop_name,
   }));
 
+  console.log("finalstopsData", finalstopsData);
+
   // Return the stop data for the given route ID
 
   return [stopsForRoute, finalstopsData];

@@ -84,7 +84,7 @@ export default function MapComponent() {
               lat: stop.stop_lat,
               lon: stop.stop_lon,
               getTooltip: () => {
-                return `Stop Name: ${stop.stop_code} ${stop.stop_name}`;
+                return `Stop Name: ${stop.stop_id} ${stop.stop_name}`;
               },
             };
           })
