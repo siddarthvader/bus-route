@@ -1,5 +1,5 @@
 import { LatLngExpression } from "leaflet";
-import { BusLocationRequestQuery, StopsEntity } from "./types";
+import { BusLocationRequestQuery, BusRouteEntity, StopsEntity } from "./types";
 
 function trimLatLang(point: string): LatLngExpression | null {
   const regex: RegExp = /POINT \((\d+\.\d+) (\d+\.\d+)\)/;
@@ -63,8 +63,8 @@ function getHoursMinutes(date: Date) {
 
 function getBusLocationRequestQuery(
   busIdList: string[],
-  startTime: string,
-  endTime: string,
+  startTime: number,
+  endTime: number,
   type = "pb"
 ): BusLocationRequestQuery {
   return {
@@ -114,16 +114,17 @@ function convertToEpochMili(time: string, currentDate: Date): number {
   return outputTime;
 }
 
-function elasticResponse(data) {
+function elasticResponse(data): BusRouteEntity[] {
   return data.hits.hits.map((item) => {
     const {
       route_info: { vid, timestamp, location, route },
     } = item._source;
     return {
-      vid,
-      timestamp,
-      location,
-      route,
+      bus_id: vid,
+      route_id: route,
+      timestamp: timestamp,
+      lat: location.lat,
+      lng: location.lon,
     };
   });
 }

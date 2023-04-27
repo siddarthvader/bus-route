@@ -152,8 +152,8 @@ export type BusLocationRequestQuery = {
         {
           range: {
             "route_info.timestamp": {
-              gte: string;
-              lte: string;
+              gte: number;
+              lte: number;
             };
           };
         }
@@ -169,4 +169,12 @@ export type RouterQueryParams = {
   bus_id: string;
   start_time: string;
   end_time: string;
+};
+
+export type BusRouteEntity = {
+  bus_id: string;
+  route_id: string;
+  timestamp: string;
+  lat: number;
+  lon: number;
 };

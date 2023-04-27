@@ -110,8 +110,8 @@ async function getStopsForRouteId(
 
 async function getBusLocations(
   busIdList: string[],
-  startTime: string,
-  endTime: string
+  startTime: number,
+  endTime: number
 ) {
   const requestQuery = getBusLocationRequestQuery(
     busIdList,
