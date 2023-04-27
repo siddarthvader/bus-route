@@ -26,8 +26,8 @@ export const defaultMapConfigOption: DefaultMapConfig = {
   height: "100%",
   minZoom: 1,
   maxZoom: 24,
-  initialScale: 4,
-  initialCenter: [0, 0],
+  initialScale: 11,
+  initialCenter: [28.7041, 77.1025],
 };
 
 export const RouteList = [
