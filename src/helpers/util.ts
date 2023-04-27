@@ -47,14 +47,7 @@ function generateTimeArray(
 
   let currentDate: Date = startDate;
   while (currentDate <= endDate) {
-    timeArray.push(
-      // currentDate.toLocaleTimeString([], {
-      //   hour: "2-digit",
-      //   minute: "2-digit",
-      //   second: "2-digit",
-      // })
-      currentDate.getTime()
-    );
+    timeArray.push(currentDate.getTime());
     currentDate.setHours(currentDate.getHours() + timeInterval);
   }
 
@@ -99,10 +92,16 @@ function getBusLocationRequestQuery(
         ],
       },
     },
+    _source: [
+      "route_info.vid",
+      "route_info.timestamp",
+      "route_info.location",
+      "route_info.route",
+    ],
   };
 }
 
-function convertToISO(time, currentDate: Date) {
+function convertToEpochMili(time: string, currentDate: Date): number {
   const inputTime = new Date(currentDate);
   inputTime.setHours(
     parseInt(time.slice(0, 2)),
@@ -110,22 +109,23 @@ function convertToISO(time, currentDate: Date) {
     parseInt(time.slice(6, 8))
   );
   const offset = inputTime.getTimezoneOffset() * 60000;
-  const outputTime =
-    new Date(inputTime.getTime() - offset).toISOString().slice(0, -5) +
-    formatTimezoneOffset(offset);
+  const outputTime = new Date(inputTime.getTime() - offset).getTime();
 
   return outputTime;
 }
-function formatTimezoneOffset(offset: number): string {
-  const sign = offset < 0 ? "-" : "+";
-  const absOffset = Math.abs(offset);
-  const hours = Math.floor(absOffset / 60);
-  const minutes = absOffset % 60;
-  return `${sign}${padZero(hours)}:${padZero(minutes)}`;
-}
 
-function padZero(num: number): string {
-  return num < 10 ? `0${num}` : num.toString();
+function elasticResponse(data) {
+  return data.hits.hits.map((item) => {
+    const {
+      route_info: { vid, timestamp, location, route },
+    } = item._source;
+    return {
+      vid,
+      timestamp,
+      location,
+      route,
+    };
+  });
 }
 
 export {
@@ -134,5 +134,6 @@ export {
   generateTimeArray,
   getHoursMinutes,
   getBusLocationRequestQuery,
-  convertToISO,
+  convertToEpochMili,
+  elasticResponse,
 };

@@ -24,7 +24,7 @@ import MapControls from "./MapControls";
 
 import RoutePath from "./RoutePath";
 import StopsMarker from "./StopsMarker";
-import { convertToISO } from "@/helpers/util";
+import { convertToEpochMili } from "@/helpers/util";
 import { start } from "repl";
 
 const {
@@ -78,8 +78,8 @@ export default function MapComponent() {
     if (bus_id && start_time && end_time) {
       console.log(start_time, end_time);
       const now = new Date();
-      const startTimeISO = convertToISO(start_time, now);
-      const endTimeISO = convertToISO(end_time, now);
+      const startTimeISO = convertToEpochMili(start_time, now);
+      const endTimeISO = convertToEpochMili(end_time, now);
 
       console.log(startTimeISO, endTimeISO);
       getBusLocations([bus_id], startTimeISO, endTimeISO).then(

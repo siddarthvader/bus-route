@@ -12,7 +12,7 @@ import {
   StopsGTFSTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
-import { getBusLocationRequestQuery } from "./util";
+import { elasticResponse, getBusLocationRequestQuery } from "./util";
 
 const readGSTFile = async <MappingType, ResultType>(
   filepath: string,
@@ -120,7 +120,7 @@ async function getBusLocations(
   );
 
   const response = await fetch(
-    `${ElasticAPIConfig.baseURL}/${ElasticAPIConfig.busLocationEndpoint}`,
+    `${ElasticAPIConfig.baseURL}/${ElasticAPIConfig.busLocationEndpoint}/`,
     {
       method: "POST",
       headers: {
@@ -130,7 +130,11 @@ async function getBusLocations(
     }
   );
 
-  console.log("response", response);
-  return response;
+  if (!response.ok) {
+    throw new Error("Unable to fetch bus locations");
+  }
+
+  const { data } = await response.json();
+  return elasticResponse(data);
 }
 export { readGSTFile, getStopsForRouteId, getBusLocations };

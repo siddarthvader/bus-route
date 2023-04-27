@@ -160,6 +160,7 @@ export type BusLocationRequestQuery = {
       ];
     };
   };
+  _source: string[];
 };
 
 export type RouterQueryParams = {
