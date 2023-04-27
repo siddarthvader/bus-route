@@ -1,4 +1,4 @@
-import { LatLngExpression, Point } from "leaflet";
+import { Draggable, LatLngExpression, Point } from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import {

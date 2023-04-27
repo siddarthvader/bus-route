@@ -186,6 +186,16 @@ function getToday(): Date {
   return new Date(today.setDate(today.getDate() - 1));
 }
 
+function getTimeInRange(gte: number, lte: number, currentTime: number): number {
+  if (currentTime < gte) {
+    return gte;
+  } else if (currentTime > lte) {
+    return lte;
+  } else {
+    return currentTime;
+  }
+}
+
 export {
   trimLatLang,
   getAxisLabelFromTime,
@@ -197,4 +207,5 @@ export {
   getBusOnRouteRequestQuery,
   elasticResponseBusonRoute,
   getToday,
+  getTimeInRange,
 };

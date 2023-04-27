@@ -43,33 +43,28 @@ function BusRoute() {
         })
     );
 
-    console.log({ busList });
-    const { bus_id } = router.query as RouterQueryParams;
-    if (bus_id) {
-      const now = getToday();
-      const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
-      const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
+    const now = getToday();
+    const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
+    const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
-      getBusLocations(busList, startTimeMili, endTimeMili).then(
-        (busLocations) => {
-          console.log({ busLocations });
-          setBusRoute(busLocations);
-          setRoutePathData(
-            busLocations
-              .filter((bus) => bus.bus_id === bus_id)
-              .map((stop) => {
-                return {
-                  lat: stop.lat,
-                  lon: stop.lon,
-                  getTooltip: () => {
-                    return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
-                  },
-                };
-              })
-          );
-        }
-      );
-    }
+    getBusLocations(busList, startTimeMili, endTimeMili).then(
+      (busLocations) => {
+        setBusRoute(busLocations);
+        // setRoutePathData(
+        //   busLocations
+        //     .filter((bus) => bus.bus_id === bus_id)
+        //     .map((stop) => {
+        //       return {
+        //         lat: stop.lat,
+        //         lon: stop.lon,
+        //         getTooltip: () => {
+        //           return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
+        //         },
+        //       };
+        //     })
+        // );
+      }
+    );
   }, [router.query, busList]);
   return <RoutePath routeData={routePathData} color="green" />;
 }

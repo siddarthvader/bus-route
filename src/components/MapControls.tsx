@@ -14,7 +14,13 @@ import {
   MapControlProps,
   PlayPauseButtonProps,
 } from "@/helpers/types";
-import { getHoursMinutes, getToday } from "@/helpers/util";
+import {
+  convertToEpochMili,
+  getHoursMinutes,
+  getTimeInRange,
+  getToday,
+} from "@/helpers/util";
+import { movieConstants } from "@/helpers/constants";
 
 export default function MapControls(props: MapControlProps) {
   const { onTimeChange, rangeList } = props;
@@ -29,7 +35,7 @@ export default function MapControls(props: MapControlProps) {
   const increaseActiveSpatial = useRouteStore().increaseActiveSpatial;
 
   const intervalRef = useRef(null);
-  const now = useRef<Date>(getToday());
+  const now = getToday();
 
   function togglePlay() {
     if (isPlaying) {
@@ -50,7 +56,7 @@ export default function MapControls(props: MapControlProps) {
     >
       <div className="flex items-center justify-between">
         <div className="mr-4 font-semibold text-zinc-600">
-          {now.current.toDateString()} : {start_time} - {end_time}
+          {now.toDateString()} : {start_time} - {end_time}
         </div>
         <div className="flex ">
           <BackwardButton onClick={() => setActiveSpatial(activeSpatial - 1)} />
@@ -61,6 +67,11 @@ export default function MapControls(props: MapControlProps) {
       <RangeSlider
         rangeList={rangeList}
         step={1}
+        currentValue={getTimeInRange(
+          convertToEpochMili(movieConstants.start_time, now),
+          convertToEpochMili(movieConstants.end_time, now),
+          getToday().getTime()
+        )}
         onValueChange={(val) => {
           onTimeChange(val);
         }}

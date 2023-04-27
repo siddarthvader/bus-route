@@ -3,16 +3,17 @@ import { getAxisLabelFromTime, getHoursMinutes } from "../helpers/util";
 
 interface RangeSliderProps {
   step: number;
+  currentValue: number;
   onValueChange?: (value: number) => void;
   rangeList: number[];
 }
 
 function RangeSlider(props: RangeSliderProps) {
-  const { rangeList } = props;
+  const { rangeList, currentValue } = props;
   const minValue = Math.min(...rangeList);
   const maxValue = Math.max(...rangeList);
 
-  const [value, setValue] = useState(minValue);
+  const [rangeValue, setRangeValue] = useState(currentValue);
 
   const range: Date[] = useMemo(
     () => getAxisLabelFromTime(rangeList),
@@ -20,8 +21,8 @@ function RangeSlider(props: RangeSliderProps) {
   );
 
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(Number(event.target.value));
     if (props.onValueChange) {
+      setRangeValue(Number(event.target.value));
       props.onValueChange(Number(event.target.value));
     }
   };
@@ -35,7 +36,7 @@ function RangeSlider(props: RangeSliderProps) {
             className="w-full -mt-1"
             min={minValue}
             max={maxValue}
-            value={value}
+            defaultValue={rangeValue}
             onChange={handleValueChange}
             step={1}
           />
@@ -44,7 +45,9 @@ function RangeSlider(props: RangeSliderProps) {
               <div
                 key={index}
                 className={`absolute bottom-[-20px] left-0 text-xs   ${
-                  value >= label.getTime() ? "text-blue-500" : "text-zinc-600"
+                  currentValue >= label.getTime()
+                    ? "text-blue-500"
+                    : "text-zinc-600"
                 }`}
                 style={{
                   left: `${
