@@ -220,4 +220,9 @@ export type MovieConstants = {
   end_time: string;
 };
 
+export type BusOnRouteStore = {
+  busList: string[];
+  setBusList: (busList: string[]) => void;
+};
+
 export type BusList = string[];
