@@ -1,5 +1,11 @@
 import { LatLngExpression } from "leaflet";
-import { BusLocationRequestQuery, BusRouteEntity, StopsEntity } from "./types";
+import {
+  BusList,
+  BusLocationRequestQuery,
+  BusOnRouteRequestQuery,
+  BusRouteEntity,
+  StopsEntity,
+} from "./types";
 
 function trimLatLang(point: string): LatLngExpression | null {
   const regex: RegExp = /POINT \((\d+\.\d+) (\d+\.\d+)\)/;
@@ -101,20 +107,58 @@ function getBusLocationRequestQuery(
   };
 }
 
-function convertToEpochMili(time: string, currentDate: Date): number {
-  const inputTime = new Date(currentDate);
-  inputTime.setHours(
-    parseInt(time.slice(0, 2)),
-    parseInt(time.slice(3, 5)),
-    parseInt(time.slice(6, 8))
-  );
-  const offset = inputTime.getTimezoneOffset() * 60000;
-  const outputTime = new Date(inputTime.getTime() - offset).getTime();
-
-  return outputTime;
+function getBusOnRouteRequestQuery(
+  routeName: string,
+  start_time: number,
+  end_time: number,
+  size = 100
+): BusOnRouteRequestQuery {
+  return {
+    query: {
+      bool: {
+        must: [
+          {
+            match: {
+              "route_info.route": routeName,
+            },
+          },
+          {
+            range: {
+              "route_info.timestamp": {
+                gte: start_time,
+                lte: end_time,
+              },
+            },
+          },
+        ],
+      },
+    },
+    aggs: {
+      unique_vids: {
+        terms: {
+          field: "route_info.vid",
+          size: size,
+        },
+      },
+    },
+  };
 }
 
-function elasticResponse(data): BusRouteEntity[] {
+function convertToEpochMili(timeStr: string, dateObj: Date): number {
+  // Parse the time string into hours, minutes, and seconds
+  const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+
+  // Set the time to the specified hours, minutes, and seconds
+  dateObj.setHours(hours);
+  dateObj.setMinutes(minutes);
+  dateObj.setSeconds(seconds);
+  dateObj.setMilliseconds(0);
+
+  // Convert the date to milliseconds and return the result
+  return dateObj.getTime();
+}
+
+function elasticResponseBusLocations(data): BusRouteEntity[] {
   return data.hits.hits.map((item) => {
     const {
       route_info: { vid, timestamp, location, route },
@@ -129,6 +173,12 @@ function elasticResponse(data): BusRouteEntity[] {
   });
 }
 
+function elasticResponseBusonRoute(data): BusList {
+  return data.aggregations.unique_vids.buckets.map((item) => {
+    return item.key;
+  });
+}
+
 export {
   trimLatLang,
   getAxisLabelFromTime,
@@ -136,5 +186,7 @@ export {
   getHoursMinutes,
   getBusLocationRequestQuery,
   convertToEpochMili,
-  elasticResponse,
+  elasticResponseBusLocations,
+  getBusOnRouteRequestQuery,
+  elasticResponseBusonRoute,
 };

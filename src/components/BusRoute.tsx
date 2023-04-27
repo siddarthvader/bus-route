@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import RoutePath from "./RoutePath";
+import { movieConstants } from "@/helpers/constants";
 
 function BusRoute() {
   const router = useRouter();
@@ -21,19 +22,17 @@ function BusRoute() {
     [] as RoutePathEntity[]
   );
 
-  console.log("busRoute", busRoute);
-
   useEffect(() => {
-    const { bus_id, start_time, end_time } = router.query as RouterQueryParams;
-    if (bus_id && start_time && end_time) {
-      console.log(start_time, end_time);
+    const { bus_id } = router.query as RouterQueryParams;
+    if (bus_id) {
       const now = new Date();
-      const startTimeISO = convertToEpochMili(start_time, now);
-      const endTimeISO = convertToEpochMili(end_time, now);
+      const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
+      const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
-      console.log(startTimeISO, endTimeISO);
-      getBusLocations([bus_id], startTimeISO, endTimeISO).then(
+      console.log(startTimeMili, endTimeMili);
+      getBusLocations([bus_id], startTimeMili, endTimeMili).then(
         (busLocations) => {
+          console.log({ busLocations });
           setBusRoute(busLocations);
           setRoutePathDate(
             busLocations.map((stop) => {

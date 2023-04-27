@@ -55,9 +55,6 @@ const columns = [
                 query: {
                   agency_id: useURLStore.getState().agency_id,
                   route_id: selectedRoute.toUpperCase(),
-                  bus_id: selectedBus,
-                  start_time: startTime,
-                  end_time: endTime,
                 },
               });
             }}

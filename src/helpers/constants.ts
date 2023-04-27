@@ -2,6 +2,7 @@ import { BoundsLiteral, PointTuple } from "leaflet";
 import {
   DefaultMapConfig,
   MapGTFSToSchedule,
+  MovieConstants,
   RouteGsftTextHeaders,
   StopTimeGsftTextHeaders,
   StopsGTFSTextHeaders,
@@ -93,4 +94,9 @@ export const EnableFilter: string[] = ["plate_no"];
 export const ElasticAPIConfig = {
   baseURL: "https://transops-api.chartr.in/api/v1",
   busLocationEndpoint: "es/.ds-production-route-assignment-*",
+};
+
+export const movieConstants: MovieConstants = {
+  start_time: "12:00:00",
+  end_time: "24:00:00",
 };

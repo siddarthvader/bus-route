@@ -71,7 +71,7 @@ export default function ColumnFilter({
         value={(columnFilterValue ?? "") as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="p-2 border border-blue-500 rounded shadow w-36"
+        className="p-2 border border-transparent rounded shadow hover:border-blue-500 w-36"
         list={column.id + "list"}
       />
       <div className="h-1" />

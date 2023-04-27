@@ -5,6 +5,7 @@ import {
   MapBoundsMax,
   MapboxConfig,
   defaultMapConfigOption,
+  movieConstants,
 } from "../helpers/constants";
 import {
   DefaultMapConfig,
@@ -16,7 +17,11 @@ import {
 } from "../helpers/types";
 import { useRouteStore, useStopsStore } from "../store/store";
 
-import { getBusLocations, getStopsForRouteId } from "@/helpers/api";
+import {
+  getBusLocations,
+  getBusOnRoute,
+  getStopsForRouteId,
+} from "@/helpers/api";
 
 import "leaflet-routing-machine";
 import { useRouter } from "next/router";
@@ -26,6 +31,8 @@ import MapControls from "./MapControls";
 import RoutePath from "./RoutePath";
 
 import BusRoute from "./BusRoute";
+import { convertToEpochMili } from "@/helpers/util";
+import { start } from "repl";
 
 const {
   id,
@@ -90,7 +97,13 @@ export default function MapComponent() {
       }
     );
 
-    //
+    const now = new Date();
+    const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
+    const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
+
+    getBusOnRoute(route_id, startTimeMili, endTimeMili).then((res) => {
+      console.log(res);
+    });
   }, [router.query]);
 
   return (

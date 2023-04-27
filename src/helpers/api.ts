@@ -6,13 +6,20 @@ import {
   MapGTFSToTripHeaders,
 } from "./constants";
 import {
+  BusList,
+  BusRouteEntity,
   RouteGsftTextHeaders,
   StopTimeGsftTextHeaders,
   StopsEntity,
   StopsGTFSTextHeaders,
   TripGsftTextHeaders,
 } from "./types";
-import { elasticResponse, getBusLocationRequestQuery } from "./util";
+import {
+  elasticResponseBusLocations,
+  elasticResponseBusonRoute,
+  getBusLocationRequestQuery,
+  getBusOnRouteRequestQuery,
+} from "./util";
 
 const readGSTFile = async <MappingType, ResultType>(
   filepath: string,
@@ -81,7 +88,6 @@ async function getStopsForRouteId(
     .sort((a, b) => Number(a.stop_sequence) - Number(b.stop_sequence))
     .map((stopTime) => Number(stopTime.stop_id));
 
-  console.log({ stopIds });
   // Find the stop data for the stop IDs
   const stopsForRoute = stopsData
     .filter((stop) => stopIds.includes(Number(stop.stop_id)))
@@ -103,8 +109,6 @@ async function getStopsForRouteId(
     stop_name: stop.stop_name,
   }));
 
-  console.log("finalstopsData", finalstopsData);
-
   // Return the stop data for the given route ID
 
   return [stopsForRoute, finalstopsData];
@@ -114,7 +118,7 @@ async function getBusLocations(
   busIdList: string[],
   startTime: number,
   endTime: number
-) {
+): Promise<BusRouteEntity[]> {
   const requestQuery = getBusLocationRequestQuery(
     busIdList,
     startTime,
@@ -137,6 +141,32 @@ async function getBusLocations(
   }
 
   const { data } = await response.json();
-  return elasticResponse(data);
+  return elasticResponseBusLocations(data);
 }
-export { readGSTFile, getStopsForRouteId, getBusLocations };
+
+async function getBusOnRoute(
+  routeName: string,
+  startTime: number,
+  endTime: number
+): BusList {
+  const requestQuery = getBusOnRouteRequestQuery(routeName, startTime, endTime);
+
+  const response = await fetch(
+    `${ElasticAPIConfig.baseURL}/${ElasticAPIConfig.busLocationEndpoint}/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestQuery),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch bus locations");
+  }
+
+  const { data } = await response.json();
+  return elasticResponseBusonRoute(data);
+}
+export { readGSTFile, getStopsForRouteId, getBusLocations, getBusOnRoute };

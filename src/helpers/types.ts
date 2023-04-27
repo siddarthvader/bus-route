@@ -169,6 +169,36 @@ export type BusLocationRequestQuery = {
   _source: string[];
 };
 
+export type BusOnRouteRequestQuery = {
+  query: {
+    bool: {
+      must: [
+        {
+          match: {
+            [key: string]: string;
+          };
+        },
+        {
+          range: {
+            "route_info.timestamp": {
+              gte: number;
+              lte: number;
+            };
+          };
+        }
+      ];
+    };
+  };
+  aggs: {
+    unique_vids: {
+      terms: {
+        field: string;
+        size: number;
+      };
+    };
+  };
+};
+
 export type RouterQueryParams = {
   agency_id: string;
   route_id: string;
@@ -184,3 +214,10 @@ export type BusRouteEntity = {
   lat: number;
   lon: number;
 };
+
+export type MovieConstants = {
+  start_time: string;
+  end_time: string;
+};
+
+export type BusList = string[];

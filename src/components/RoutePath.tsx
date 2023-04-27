@@ -17,7 +17,7 @@ function RoutePath(props: RoutePathProps) {
           <CircleMarker
             key={"circle_" + index}
             center={[stop.lat, stop.lon]}
-            radius={2}
+            radius={index === 0 || index === routeData.length - 1 ? 6 : 2}
             color={
               index === 0
                 ? "green"
@@ -38,13 +38,6 @@ function RoutePath(props: RoutePathProps) {
                   routeData[index + 1]?.lon ?? stop.lon,
                 ],
               ]}
-              color={
-                index === 0
-                  ? "green"
-                  : index === routeData.length - 2
-                  ? "red"
-                  : color
-              }
             >
               <Tooltip key={"tp2_" + index}>{stop.getTooltip()}</Tooltip>
             </Polyline>
