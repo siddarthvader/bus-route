@@ -7,7 +7,7 @@ import {
 import { convertToEpochMili } from "@/helpers/util";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { CircleMarker, Tooltip } from "react-leaflet";
+
 import RoutePath from "./RoutePath";
 
 function BusRoute() {

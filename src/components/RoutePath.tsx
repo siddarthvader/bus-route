@@ -14,33 +14,41 @@ function RoutePath(props: RoutePathProps) {
     <>
       {routeData.map((stop, index) => (
         <div key={"wrapper_" + index}>
-          {index === 0 ? (
-            <Marker key={"start_" + index} position={[stop.lat, stop.lon]} />
-          ) : null}
           <CircleMarker
             key={"circle_" + index}
             center={[stop.lat, stop.lon]}
             radius={2}
-            color={color}
+            color={
+              index === 0
+                ? "green"
+                : index === routeData.length - 1
+                ? "red"
+                : color
+            }
           >
-            <Tooltip key={"tp1" + index}>{stop.getTooltip(stop)}</Tooltip>
+            <Tooltip key={"tp1" + index}>{stop.getTooltip()}</Tooltip>
           </CircleMarker>
-          <Polyline
-            key={"poly_" + index}
-            positions={[
-              [stop.lat, stop.lon],
-              [
-                routeData[index + 1]?.lat ?? stop.lat,
-                routeData[index + 1]?.lon ?? stop.lon,
-              ],
-            ]}
-            color={color}
-          >
-            <Tooltip key={"tp2_" + index}>{stop.getTooltip(stop)}</Tooltip>
-          </Polyline>
-          {index === routeData.length - 1 ? (
-            <Marker key={"stop_" + index} position={[stop.lat, stop.lon]} />
-          ) : null}
+          {routeData[index + 1] && (
+            <Polyline
+              key={"poly_" + index}
+              positions={[
+                [stop.lat, stop.lon],
+                [
+                  routeData[index + 1]?.lat ?? stop.lat,
+                  routeData[index + 1]?.lon ?? stop.lon,
+                ],
+              ]}
+              color={
+                index === 0
+                  ? "green"
+                  : index === routeData.length - 2
+                  ? "red"
+                  : color
+              }
+            >
+              <Tooltip key={"tp2_" + index}>{stop.getTooltip()}</Tooltip>
+            </Polyline>
+          )}
         </div>
       ))}
     </>
