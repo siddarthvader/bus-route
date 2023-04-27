@@ -108,8 +108,53 @@ function RouteTable() {
   }, []);
 
   return (
-    <div className="w-full h-full overflow-hidden bg-white text-zinc-700">
-      <div className="flex items-center justify-end px-4 space-x-2">
+    <div className="w-full h-full bg-white text-zinc-700">
+      <table className="w-full h-[80%] min-w-full p-2 overflow-hidden divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="p-2 text-xs font-bold tracking-wider text-left text-gray-500 uppercase"
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                  {header.column.getCanFilter() &&
+                  EnableFilter.includes(
+                    header.column.id as keyof RouteTableRow
+                  ) ? (
+                    <div>
+                      <ColumnFilter column={header.column} table={table} />
+                    </div>
+                  ) : null}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody className="h-[100%] bg-white divide-y divide-gray-200">
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="p-2 text-xs break-words whitespace-normal"
+                >
+                  {/* {flexRender(cell.column.columnDef.cell, cell.getContext())} */}
+                  {flexRender(cell.column.columnDef.cell, {
+                    ...cell.getContext(),
+                    router,
+                  })}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="flex items-center justify-around p-2 space-x-2 bg-white">
         <button
           className="px-2 border rounded shadow-xs"
           onClick={() => table.setPageIndex(0)}
@@ -171,51 +216,6 @@ function RouteTable() {
           ))}
         </select>
       </div>
-      <table className="w-full h-screen min-w-full p-2 overflow-auto divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="p-2 text-xs font-bold tracking-wider text-left text-gray-500 uppercase"
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                  {header.column.getCanFilter() &&
-                  EnableFilter.includes(
-                    header.column.id as keyof RouteTableRow
-                  ) ? (
-                    <div>
-                      <ColumnFilter column={header.column} table={table} />
-                    </div>
-                  ) : null}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="h-full bg-white divide-y divide-gray-200">
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="p-2 text-xs break-words whitespace-normal"
-                >
-                  {/* {flexRender(cell.column.columnDef.cell, cell.getContext())} */}
-                  {flexRender(cell.column.columnDef.cell, {
-                    ...cell.getContext(),
-                    router,
-                  })}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }
