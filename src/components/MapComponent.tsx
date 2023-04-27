@@ -47,10 +47,6 @@ export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
-  map?.target.on("moveend", function () {
-    console.log(map?.target.getBounds());
-  });
-
   useEffect(() => {
     if (routeData.length) {
       const flyTo: LatLngExpression = {
