@@ -15,7 +15,11 @@ import {
   RouterQueryParams,
   StopsEntity,
 } from "../helpers/types";
-import { useRouteStore, useStopsStore } from "../store/store";
+import {
+  useBusOnRouteStore,
+  useRouteStore,
+  useStopsStore,
+} from "../store/store";
 
 import {
   getBusLocations,
@@ -51,6 +55,8 @@ export default function MapComponent() {
   const stopsData = useStopsStore((state) => state.stopsData);
   const setRouteData = useRouteStore((state) => state.setRouteData);
   const setStops = useStopsStore((state) => state.setStops);
+
+  const setBusList = useBusOnRouteStore((state) => state.setBusList);
 
   const selectedRoute = router.query.route_id as string;
 
@@ -102,7 +108,7 @@ export default function MapComponent() {
     const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
     getBusOnRoute(route_id, startTimeMili, endTimeMili).then((res) => {
-      console.log(res);
+      setBusList(res);
     });
   }, [router.query]);
 

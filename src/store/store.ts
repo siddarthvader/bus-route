@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { generateTimeArray } from "../helpers/util";
 import {
+  BusOnRouteStore,
   RouteStore,
   ScheduleObject,
   ScheduleStore,
@@ -61,4 +62,15 @@ const useStopsStore = create<StopsStore>((set, get) => ({
   setStops: (stopsData: StopsEntity[]) => set(() => ({ stopsData })),
 }));
 
-export { useScheduleStore, useURLStore, useRouteStore, useStopsStore };
+const useBusOnRouteStore = create<BusOnRouteStore>((set, get) => ({
+  busList: [],
+  setBusList: (busList: string[]) => set(() => ({ busList })),
+}));
+
+export {
+  useScheduleStore,
+  useURLStore,
+  useRouteStore,
+  useStopsStore,
+  useBusOnRouteStore,
+};
