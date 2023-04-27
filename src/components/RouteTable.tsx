@@ -37,22 +37,12 @@ const columns = [
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("route_no", {
-    cell: (info) => <div>{info.getValue().toUpperCase()}</div>,
-  }),
-  columnHelper.accessor("trip_start_time", {
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
-  columnHelper.accessor("trip_end_time", {
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
-  columnHelper.display({
-    id: "actions",
     cell: (info: unknown) => {
       const infoCasted = info as CellContext<RouteTableRow, string>;
       return (
         <div className="">
-          <button
-            className="w-auto px-4 py-1 text-xs text-blue-700 bg-transparent border border-blue-500 rounded font-xs hover:bg-blue-500 hover:text-white hover:border-transparent"
+          <a
+            className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
             onClick={async (e) => {
               const selectedRoute: string = infoCasted.row.getValue("route_no");
               const selectedBus: string = infoCasted.row.getValue("plate_no");
@@ -72,11 +62,17 @@ const columns = [
               });
             }}
           >
-            Get Route
-          </button>
+            {infoCasted.getValue().toUpperCase()}
+          </a>
         </div>
       );
     },
+  }),
+  columnHelper.accessor("trip_start_time", {
+    cell: (info) => <div>{info.getValue()}</div>,
+  }),
+  columnHelper.accessor("trip_end_time", {
+    cell: (info) => <div>{info.getValue()}</div>,
   }),
 ];
 
@@ -112,7 +108,7 @@ function RouteTable() {
   }, []);
 
   return (
-    <div className="w-full h-screen overflow-auto bg-white text-zinc-700">
+    <div className="w-full h-full overflow-hidden bg-white text-zinc-700">
       <div className="flex items-center justify-end px-4 space-x-2">
         <button
           className="px-2 border rounded shadow-xs"
