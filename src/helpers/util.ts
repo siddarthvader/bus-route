@@ -124,7 +124,7 @@ function elasticResponse(data): BusRouteEntity[] {
       route_id: route,
       timestamp: timestamp,
       lat: location.lat,
-      lng: location.lon,
+      lon: location.lon,
     };
   });
 }

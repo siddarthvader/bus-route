@@ -10,6 +10,7 @@ import {
   DefaultMapConfig,
   LMapState,
   MapRef,
+  RoutePathEntity,
   RouterQueryParams,
   StopsEntity,
 } from "../helpers/types";
@@ -26,6 +27,7 @@ import RoutePath from "./RoutePath";
 import StopsMarker from "./StopsMarker";
 import { convertToEpochMili } from "@/helpers/util";
 import { start } from "repl";
+import BusRoute from "./BusRoute";
 
 const {
   id,
@@ -50,6 +52,11 @@ export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
+  const [routePathData, setRoutePathDate] = useState<RoutePathEntity[]>(
+    [] as RoutePathEntity[]
+  );
+
+  useRouteStore.subscribe(() => {});
   useEffect(() => {
     if (routeData.length) {
       const flyTo: LatLngExpression = {
@@ -66,28 +73,26 @@ export default function MapComponent() {
   }
 
   useEffect(() => {
-    const { route_id, agency_id, bus_id, start_time, end_time } =
-      router.query as RouterQueryParams;
+    const { route_id, agency_id } = router.query as RouterQueryParams;
     getStopsForRouteId(route_id as string, agency_id as string).then(
       ([routeStops, allStops]) => {
         setRouteData(routeStops);
         setStops(allStops);
+        setRoutePathDate(
+          routeStops.map((stop) => {
+            return {
+              lat: stop.stop_lat,
+              lon: stop.stop_lon,
+              getTooltip: () => {
+                return `Stop Name: ${stop.stop_code} ${stop.stop_name}`;
+              },
+            };
+          })
+        );
       }
     );
 
-    if (bus_id && start_time && end_time) {
-      console.log(start_time, end_time);
-      const now = new Date();
-      const startTimeISO = convertToEpochMili(start_time, now);
-      const endTimeISO = convertToEpochMili(end_time, now);
-
-      console.log(startTimeISO, endTimeISO);
-      getBusLocations([bus_id], startTimeISO, endTimeISO).then(
-        (busLocations) => {
-          console.log(busLocations);
-        }
-      );
-    }
+    //
   }, [router.query]);
 
   return (
@@ -114,7 +119,8 @@ export default function MapComponent() {
             url={`https://api.mapbox.com/styles/v1/${MapboxConfig.username}/${MapboxConfig.baseMapID}/tiles/{z}/{x}/{y}?access_token=${MapboxConfig.accessToken}`}
           ></TileLayer>
           {/* <StopsMarker stopsData={stopsData} /> */}
-          <RoutePath routeData={routeData} />
+          <RoutePath routeData={routePathData} color={"blue"} />
+          <BusRoute />
         </MapContainer>
       </div>
       {selectedRoute && (

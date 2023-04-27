@@ -86,6 +86,12 @@ export type StopsObject = {
 
 export interface StopsEntity extends StopsObject {}
 
+export interface RoutePathEntity {
+  lat: number;
+  lon: number;
+  getTooltip: () => string;
+}
+
 export type RouteGsftTextHeaders = {
   agency_id: string;
   route_id: string;
