@@ -20,12 +20,30 @@ function BusRoute() {
     [] as BusRouteEntity[]
   );
 
-  const [routePathData, setRoutePathDate] = useState<RoutePathEntity[]>(
+  const [routePathData, setRoutePathData] = useState<RoutePathEntity[]>(
     [] as RoutePathEntity[]
   );
 
   const busList: BusList = useBusOnRouteStore((state) => state.busList);
+
+  useEffect(() => {}, [router.query.bus_id]);
+
   useEffect(() => {
+    setRoutePathData(
+      busRoute
+        .filter((bus) => bus.bus_id === router.query.bus_id)
+        .map((stop) => {
+          return {
+            lat: stop.lat,
+            lon: stop.lon,
+            getTooltip: () => {
+              return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
+            },
+          };
+        })
+    );
+
+    console.log({ busList });
     const { bus_id } = router.query as RouterQueryParams;
     if (bus_id) {
       const now = getToday();
@@ -36,7 +54,7 @@ function BusRoute() {
         (busLocations) => {
           console.log({ busLocations });
           setBusRoute(busLocations);
-          setRoutePathDate(
+          setRoutePathData(
             busLocations
               .filter((bus) => bus.bus_id === bus_id)
               .map((stop) => {
@@ -52,7 +70,7 @@ function BusRoute() {
         }
       );
     }
-  }, [router.query]);
+  }, [router.query, busList]);
   return <RoutePath routeData={routePathData} color="green" />;
 }
 

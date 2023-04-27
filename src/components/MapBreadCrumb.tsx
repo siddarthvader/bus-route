@@ -28,8 +28,7 @@ function MapBreadCrumb() {
         {busList.map((bus, key) => (
           <a
             key={"buslist_" + key}
-            onClick={() => goToBus(bus)}
-            className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
+            className="font-medium cursor-pointer hover:underline"
           >
             {bus}
           </a>

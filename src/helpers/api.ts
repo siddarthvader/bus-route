@@ -148,7 +148,7 @@ async function getBusOnRoute(
   routeName: string,
   startTime: number,
   endTime: number
-): BusList {
+): Promise<BusList> {
   const requestQuery = getBusOnRouteRequestQuery(routeName, startTime, endTime);
 
   const response = await fetch(

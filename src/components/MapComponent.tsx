@@ -63,7 +63,7 @@ export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
-  const [routePathData, setRoutePathDate] = useState<RoutePathEntity[]>(
+  const [routePathData, setRoutePathData] = useState<RoutePathEntity[]>(
     [] as RoutePathEntity[]
   );
 
@@ -89,7 +89,7 @@ export default function MapComponent() {
       ([routeStops, allStops]) => {
         setRouteData(routeStops);
         setStops(allStops);
-        setRoutePathDate(
+        setRoutePathData(
           routeStops.map((stop) => {
             return {
               lat: stop.stop_lat,

@@ -14,7 +14,7 @@ import {
   MapControlProps,
   PlayPauseButtonProps,
 } from "@/helpers/types";
-import { getHoursMinutes } from "@/helpers/util";
+import { getHoursMinutes, getToday } from "@/helpers/util";
 
 export default function MapControls(props: MapControlProps) {
   const { onTimeChange, rangeList } = props;
@@ -29,7 +29,7 @@ export default function MapControls(props: MapControlProps) {
   const increaseActiveSpatial = useRouteStore().increaseActiveSpatial;
 
   const intervalRef = useRef(null);
-  const now = useRef<Date>(new Date());
+  const now = useRef<Date>(getToday());
 
   function togglePlay() {
     if (isPlaying) {
