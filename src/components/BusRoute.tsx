@@ -32,27 +32,28 @@ function BusRoute() {
       const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
       const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
-      console.log(startTimeMili, endTimeMili);
       getBusLocations(busList, startTimeMili, endTimeMili).then(
         (busLocations) => {
           console.log({ busLocations });
           setBusRoute(busLocations);
           setRoutePathDate(
-            busLocations.map((stop) => {
-              return {
-                lat: stop.lat,
-                lon: stop.lon,
-                getTooltip: () => {
-                  return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
-                },
-              };
-            })
+            busLocations
+              .filter((bus) => bus.bus_id === bus_id)
+              .map((stop) => {
+                return {
+                  lat: stop.lat,
+                  lon: stop.lon,
+                  getTooltip: () => {
+                    return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
+                  },
+                };
+              })
           );
         }
       );
     }
   }, [router.query]);
-  return <RoutePath routeData={routePathData} color="red" />;
+  return <RoutePath routeData={routePathData} color="green" />;
 }
 
 export default BusRoute;

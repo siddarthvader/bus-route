@@ -34,6 +34,7 @@ type CellContext<TData extends RouteTableRow, TValue> = TanCellContext<
 
 const columns = [
   columnHelper.accessor("plate_no", {
+    header: "Bus ID",
     cell: (info: unknown) => {
       const infoCasted = info as CellContext<RouteTableRow, string>;
       return (
@@ -59,6 +60,7 @@ const columns = [
     },
   }),
   columnHelper.accessor("route_no", {
+    header: "Route",
     cell: (info: unknown) => {
       const infoCasted = info as CellContext<RouteTableRow, string>;
       return (
@@ -86,9 +88,11 @@ const columns = [
     },
   }),
   columnHelper.accessor("trip_start_time", {
+    header: "Start Time",
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("trip_end_time", {
+    header: "End Time",
     cell: (info) => <div>{info.getValue()}</div>,
   }),
 ];
@@ -135,10 +139,6 @@ function RouteTable() {
                   key={header.id}
                   className="p-2 text-xs font-bold tracking-wider text-left text-gray-500 uppercase"
                 >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
                   {header.column.getCanFilter() &&
                   EnableFilter.includes(
                     header.column.id as keyof RouteTableRow
@@ -146,7 +146,12 @@ function RouteTable() {
                     <div>
                       <ColumnFilter column={header.column} table={table} />
                     </div>
-                  ) : null}
+                  ) : (
+                    flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )
+                  )}
                 </th>
               ))}
             </tr>
@@ -171,7 +176,7 @@ function RouteTable() {
           ))}
         </tbody>
       </table>
-      <div className="flex items-center justify-around p-2 space-x-2 bg-white">
+      <div className="flex flex-wrap items-center justify-around p-2 space-x-2 bg-white">
         <button
           className="px-2 border rounded shadow-xs"
           onClick={() => table.setPageIndex(0)}

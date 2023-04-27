@@ -71,9 +71,11 @@ function getBusLocationRequestQuery(
   busIdList: string[],
   startTime: number,
   endTime: number,
-  type = "pb"
+  type = "pb",
+  size = 10000
 ): BusLocationRequestQuery {
   return {
+    size: size,
     query: {
       bool: {
         must: [

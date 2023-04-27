@@ -23,10 +23,10 @@ export default function Home() {
     <main className="flex flex-col min-h-screen">
       <Header />
       <div className=" w-[96%] m-auto p-2 flex h-[calc(100vh- 40px)]">
-        <div className="w-[40%] h-screen">
+        <div className="w-[30%] h-screen">
           <RouteTable />
         </div>
-        <div className="w-[60%] h-screen">
+        <div className="w-[70%] h-screen">
           <MapComponent />
         </div>
       </div>

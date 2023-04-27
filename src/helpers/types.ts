@@ -142,6 +142,7 @@ export type Label = {
 };
 
 export type BusLocationRequestQuery = {
+  size: number;
   query: {
     bool: {
       must: [
