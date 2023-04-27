@@ -33,9 +33,6 @@ type CellContext<TData extends RouteTableRow, TValue> = TanCellContext<
 };
 
 const columns = [
-  columnHelper.accessor("duty_id", {
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
   columnHelper.accessor("plate_no", {
     cell: (info) => <div>{info.getValue()}</div>,
   }),
@@ -46,9 +43,6 @@ const columns = [
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("trip_end_time", {
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
-  columnHelper.accessor("trip_number", {
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.display({
@@ -118,7 +112,7 @@ function RouteTable() {
   }, []);
 
   return (
-    <div className="w-full h-[30%] overflow-auto bg-white text-zinc-700">
+    <div className="w-full h-screen overflow-auto bg-white text-zinc-700">
       <div className="flex items-center justify-end px-4 space-x-2">
         <button
           className="px-2 border rounded shadow-xs"
@@ -181,7 +175,7 @@ function RouteTable() {
           ))}
         </select>
       </div>
-      <table className="w-full h-[300px] overflow-auto p-2 min-w-full divide-y divide-gray-200">
+      <table className="w-full h-screen min-w-full p-2 overflow-auto divide-y divide-gray-200">
         <thead className="bg-gray-50">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -207,7 +201,7 @@ function RouteTable() {
             </tr>
           ))}
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200 ">
+        <tbody className="h-full bg-white divide-y divide-gray-200">
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (

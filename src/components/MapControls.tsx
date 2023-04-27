@@ -45,7 +45,7 @@ export default function MapControls(props: MapControlProps) {
 
   return (
     <div
-      className=" rounded-lg bg-white shadow-lg z-[1000] absolute bottom-2 left-[20%] py-2 px-4"
+      className=" rounded-lg bg-white shadow-lg z-[1000] absolute bottom-[10%] left-0 py-2 px-4"
       style={{ width: rangeList.length * 69 }}
     >
       <div className="flex items-center justify-between">

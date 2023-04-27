@@ -24,9 +24,7 @@ import MapBreadCrumb from "./MapBreadCrumb";
 import MapControls from "./MapControls";
 
 import RoutePath from "./RoutePath";
-import StopsMarker from "./StopsMarker";
-import { convertToEpochMili } from "@/helpers/util";
-import { start } from "repl";
+
 import BusRoute from "./BusRoute";
 
 const {
@@ -96,7 +94,7 @@ export default function MapComponent() {
   }, [router.query]);
 
   return (
-    <div className="relative flex h-[70%]">
+    <div className="relative flex h-full">
       <div className="h-full z-[999] flex w-full">
         <MapContainer
           id={id}
