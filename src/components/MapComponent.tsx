@@ -35,7 +35,7 @@ import MapControls from "./MapControls";
 import RoutePath from "./RoutePath";
 
 import BusRoute from "./BusRoute";
-import { convertToEpochMili } from "@/helpers/util";
+import { convertToEpochMili, getToday } from "@/helpers/util";
 import { start } from "repl";
 
 const {
@@ -103,7 +103,7 @@ export default function MapComponent() {
       }
     );
 
-    const now = new Date();
+    const now = getToday();
     const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
     const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 

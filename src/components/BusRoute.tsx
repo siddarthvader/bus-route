@@ -1,15 +1,17 @@
 import { getBusLocations } from "@/helpers/api";
 import {
+  BusList,
   BusRouteEntity,
   RoutePathEntity,
   RouterQueryParams,
 } from "@/helpers/types";
-import { convertToEpochMili } from "@/helpers/util";
+import { convertToEpochMili, getToday } from "@/helpers/util";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import RoutePath from "./RoutePath";
 import { movieConstants } from "@/helpers/constants";
+import { useBusOnRouteStore } from "@/store/store";
 
 function BusRoute() {
   const router = useRouter();
@@ -22,15 +24,16 @@ function BusRoute() {
     [] as RoutePathEntity[]
   );
 
+  const busList: BusList = useBusOnRouteStore((state) => state.busList);
   useEffect(() => {
     const { bus_id } = router.query as RouterQueryParams;
     if (bus_id) {
-      const now = new Date();
+      const now = getToday();
       const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
       const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
       console.log(startTimeMili, endTimeMili);
-      getBusLocations([bus_id], startTimeMili, endTimeMili).then(
+      getBusLocations(busList, startTimeMili, endTimeMili).then(
         (busLocations) => {
           console.log({ busLocations });
           setBusRoute(busLocations);

@@ -179,6 +179,11 @@ function elasticResponseBusonRoute(data): BusList {
   });
 }
 
+function getToday(): Date {
+  let today = new Date();
+  return new Date(today.setDate(today.getDate() - 1));
+}
+
 export {
   trimLatLang,
   getAxisLabelFromTime,
@@ -189,4 +194,5 @@ export {
   elasticResponseBusLocations,
   getBusOnRouteRequestQuery,
   elasticResponseBusonRoute,
+  getToday,
 };

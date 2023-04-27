@@ -34,34 +34,54 @@ type CellContext<TData extends RouteTableRow, TValue> = TanCellContext<
 
 const columns = [
   columnHelper.accessor("plate_no", {
-    cell: (info) => <div>{info.getValue()}</div>,
+    cell: (info: unknown) => {
+      const infoCasted = info as CellContext<RouteTableRow, string>;
+      return (
+        <a
+          className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
+          onClick={async (e) => {
+            const selectedRoute: string = infoCasted.row.getValue("route_no");
+            const selectedBus: string = infoCasted.row.getValue("plate_no");
+
+            infoCasted.router.push({
+              pathname: "/",
+              query: {
+                agency_id: useURLStore.getState().agency_id,
+                route_id: selectedRoute.toUpperCase(),
+                bus_id: selectedBus.toUpperCase(),
+              },
+            });
+          }}
+        >
+          {infoCasted.getValue().toUpperCase()}
+        </a>
+      );
+    },
   }),
   columnHelper.accessor("route_no", {
     cell: (info: unknown) => {
       const infoCasted = info as CellContext<RouteTableRow, string>;
       return (
-        <div className="">
-          <a
-            className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
-            onClick={async (e) => {
-              const selectedRoute: string = infoCasted.row.getValue("route_no");
-              const selectedBus: string = infoCasted.row.getValue("plate_no");
+        <a
+          className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
+          onClick={async (e) => {
+            const selectedRoute: string = infoCasted.row.getValue("route_no");
+            const selectedBus: string = infoCasted.row.getValue("plate_no");
 
-              const startTime: string =
-                infoCasted.row.getValue("trip_start_time");
-              const endTime: string = infoCasted.row.getValue("trip_end_time");
-              infoCasted.router.push({
-                pathname: "/",
-                query: {
-                  agency_id: useURLStore.getState().agency_id,
-                  route_id: selectedRoute.toUpperCase(),
-                },
-              });
-            }}
-          >
-            {infoCasted.getValue().toUpperCase()}
-          </a>
-        </div>
+            const startTime: string =
+              infoCasted.row.getValue("trip_start_time");
+            const endTime: string = infoCasted.row.getValue("trip_end_time");
+            infoCasted.router.push({
+              pathname: "/",
+              query: {
+                agency_id: useURLStore.getState().agency_id,
+                route_id: selectedRoute.toUpperCase(),
+              },
+            });
+          }}
+        >
+          {infoCasted.getValue().toUpperCase()}
+        </a>
       );
     },
   }),
