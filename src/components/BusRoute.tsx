@@ -1,17 +1,16 @@
 import { getBusLocations } from "@/helpers/api";
+import { BusList, BusRouteEntity, RoutePathEntity } from "@/helpers/types";
 import {
-  BusList,
-  BusRouteEntity,
-  RoutePathEntity,
-  RouterQueryParams,
-} from "@/helpers/types";
-import { convertToEpochMili, getToday } from "@/helpers/util";
+  convertToEpochMili,
+  getTimeStampedBusRoutes,
+  getToday,
+} from "@/helpers/util";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-import RoutePath from "./RoutePath";
 import { movieConstants } from "@/helpers/constants";
-import { useBusOnRouteStore } from "@/store/store";
+import { useBusOnRouteStore, useMovieStore } from "@/store/store";
+import { CircleMarker, Marker, Polyline, Tooltip } from "react-leaflet";
 
 function BusRoute() {
   const router = useRouter();
@@ -26,47 +25,44 @@ function BusRoute() {
 
   const busList: BusList = useBusOnRouteStore((state) => state.busList);
 
-  useEffect(() => {}, [router.query.bus_id]);
+  const setTimestampBusRoutes = useBusOnRouteStore(
+    (state) => state.setTimestampBusRoutes
+  );
+
+  const timestampBusRoutes = useBusOnRouteStore(
+    (state) => state.timestampBusRoutes
+  );
+
+  const currentTimestamp = useMovieStore((state) => state.currentTimestamp);
 
   useEffect(() => {
-    setRoutePathData(
-      busRoute
-        .filter((bus) => bus.bus_id === router.query.bus_id)
-        .map((stop) => {
-          return {
-            lat: stop.lat,
-            lon: stop.lon,
-            getTooltip: () => {
-              return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
-            },
-          };
-        })
-    );
-
     const now = getToday();
     const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
     const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
     getBusLocations(busList, startTimeMili, endTimeMili).then(
       (busLocations) => {
-        setBusRoute(busLocations);
-        // setRoutePathData(
-        //   busLocations
-        //     .filter((bus) => bus.bus_id === bus_id)
-        //     .map((stop) => {
-        //       return {
-        //         lat: stop.lat,
-        //         lon: stop.lon,
-        //         getTooltip: () => {
-        //           return `Stop Name: ${stop.bus_id} ${stop.route_id} : ${stop.timestamp}`;
-        //         },
-        //       };
-        //     })
-        // );
+        const timeStampedBusRoutes = getTimeStampedBusRoutes(busLocations);
+
+        setTimestampBusRoutes(timeStampedBusRoutes);
       }
     );
   }, [router.query, busList]);
-  return <RoutePath routeData={routePathData} color="green" />;
+
+  return (
+    <>
+      {timestampBusRoutes[currentTimestamp]?.map((bus, index) => (
+        <CircleMarker
+          key={`timestamped-bus_${index}`}
+          center={[bus.lat, bus.lon]}
+          stroke={false}
+          fillColor="green"
+          radius={10}
+          fillOpacity={0.69}
+        ></CircleMarker>
+      ))}
+    </>
+  );
 }
 
 export default BusRoute;

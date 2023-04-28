@@ -224,6 +224,23 @@ export type MovieConstants = {
 export type BusOnRouteStore = {
   busList: string[];
   setBusList: (busList: string[]) => void;
+  timestampBusRoutes: TimeStampedBusRouteEntity;
+  setTimestampBusRoutes: (
+    timestampBusRoutes: TimeStampedBusRouteEntity
+  ) => void;
+  getBusAtTime: (time: number) => BusRouteEntity[];
 };
 
+export type TimeStampedBusRouteEntity = {
+  [key: number]: BusRouteEntity[];
+};
+
+export type MovieStore = {
+  isPlaying: boolean;
+  setIsPlaying: (isPlaying: boolean) => void;
+  currentTimestamp: number;
+  setCurrentTimestamp: (currentTimestamp: number) => void;
+  forward: () => void;
+  backward: () => void;
+};
 export type BusList = string[];

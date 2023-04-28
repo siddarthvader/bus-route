@@ -6,8 +6,8 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import RangeSlider from "./RangeSlider";
-import { useRouteStore } from "../store/store";
-import { useRef, useState } from "react";
+import { useMovieStore, useRouteStore } from "../store/store";
+import { useEffect, useRef, useState } from "react";
 import {
   BackwardButtonProps,
   ForWardButtonProps,
@@ -15,6 +15,7 @@ import {
   PlayPauseButtonProps,
 } from "@/helpers/types";
 import {
+  convertMiliSecondstoMinutes,
   convertToEpochMili,
   getHoursMinutes,
   getTimeInRange,
@@ -23,19 +24,37 @@ import {
 import { movieConstants } from "@/helpers/constants";
 
 export default function MapControls(props: MapControlProps) {
+  const setCurrentTimestamp = useMovieStore(
+    (state) => state.setCurrentTimestamp
+  );
   const { onTimeChange, rangeList } = props;
   const start_time = getHoursMinutes(new Date(rangeList[0]));
   const end_time = getHoursMinutes(new Date(rangeList[rangeList.length - 1]));
 
-  const [isPlaying, setPlaying] = useState(false);
-
   const setActiveSpatial = useRouteStore().setActiveSpatial;
   const activeSpatial = useRouteStore().activeSpatial;
+
+  const forward = useMovieStore((state) => state.forward);
+  const backward = useMovieStore((state) => state.backward);
+  const isPlaying = useMovieStore((state) => state.isPlaying);
+  const setIsPlaying = useMovieStore((state) => state.setIsPlaying);
 
   const increaseActiveSpatial = useRouteStore().increaseActiveSpatial;
 
   const intervalRef = useRef(null);
   const now = getToday();
+
+  const [currentTime] = useState(
+    getTimeInRange(
+      convertToEpochMili(movieConstants.start_time, now),
+      convertToEpochMili(movieConstants.end_time, now),
+      getToday().getTime()
+    )
+  );
+
+  useEffect(() => {
+    setCurrentTimestamp(convertMiliSecondstoMinutes(currentTime));
+  }, [currentTime, setCurrentTimestamp]);
 
   function togglePlay() {
     if (isPlaying) {
@@ -43,10 +62,10 @@ export default function MapControls(props: MapControlProps) {
       intervalRef.current = null;
     } else {
       intervalRef.current = setInterval(() => {
-        increaseActiveSpatial();
+        forward();
       }, 500);
     }
-    setPlaying((prev) => !prev);
+    setIsPlaying(!isPlaying);
   }
 
   return (
@@ -67,12 +86,11 @@ export default function MapControls(props: MapControlProps) {
       <RangeSlider
         rangeList={rangeList}
         step={1}
-        currentValue={getTimeInRange(
-          convertToEpochMili(movieConstants.start_time, now),
-          convertToEpochMili(movieConstants.end_time, now),
-          getToday().getTime()
-        )}
+        currentValue={currentTime}
         onValueChange={(val) => {
+          clearInterval(intervalRef.current);
+          setIsPlaying(false);
+          setCurrentTimestamp(convertMiliSecondstoMinutes(val));
           onTimeChange(val);
         }}
       />

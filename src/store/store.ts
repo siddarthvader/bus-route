@@ -4,10 +4,13 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { generateTimeArray } from "../helpers/util";
 import {
   BusOnRouteStore,
+  BusRouteEntity,
+  MovieStore,
   RouteStore,
   ScheduleObject,
   ScheduleStore,
   StopsEntity,
+  TimeStampedBusRouteEntity,
   URLStore,
 } from "../helpers/types";
 
@@ -65,6 +68,27 @@ const useStopsStore = create<StopsStore>((set, get) => ({
 const useBusOnRouteStore = create<BusOnRouteStore>((set, get) => ({
   busList: [],
   setBusList: (busList: string[]) => set(() => ({ busList })),
+  timestampBusRoutes: {} as TimeStampedBusRouteEntity,
+  setTimestampBusRoutes: (timestampBusRoutes: TimeStampedBusRouteEntity) =>
+    set(() => ({ timestampBusRoutes })),
+  getBusAtTime: (timestamp: number) => {
+    const busList = get().timestampBusRoutes[timestamp];
+    return busList;
+  },
+}));
+
+const useMovieStore = create<MovieStore>((set, get) => ({
+  currentTimestamp: 0,
+  setCurrentTimestamp: (currentTimestamp: number) =>
+    set(() => ({ currentTimestamp })),
+  isPlaying: false,
+  setIsPlaying: (isPlaying: boolean) => set(() => ({ isPlaying })),
+  forward: () => {
+    set((state) => ({ currentTimestamp: state.currentTimestamp + 10 }));
+  },
+  backward: () => {
+    set((state) => ({ currentTimestamp: state.currentTimestamp - 10 }));
+  },
 }));
 
 export {
@@ -73,4 +97,5 @@ export {
   useRouteStore,
   useStopsStore,
   useBusOnRouteStore,
+  useMovieStore,
 };
