@@ -1,4 +1,4 @@
-import { LatLngExpression, Point } from "leaflet";
+import { Draggable, LatLngExpression, Point } from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import {
@@ -35,7 +35,7 @@ import MapControls from "./MapControls";
 import RoutePath from "./RoutePath";
 
 import BusRoute from "./BusRoute";
-import { convertToEpochMili } from "@/helpers/util";
+import { convertToEpochMili, getToday } from "@/helpers/util";
 import { start } from "repl";
 
 const {
@@ -63,7 +63,7 @@ export default function MapComponent() {
   const [map, setMap] = useState<LMapState | null>(null);
   const baseMapRef: MapRef = useRef(null);
 
-  const [routePathData, setRoutePathDate] = useState<RoutePathEntity[]>(
+  const [routePathData, setRoutePathData] = useState<RoutePathEntity[]>(
     [] as RoutePathEntity[]
   );
 
@@ -89,7 +89,7 @@ export default function MapComponent() {
       ([routeStops, allStops]) => {
         setRouteData(routeStops);
         setStops(allStops);
-        setRoutePathDate(
+        setRoutePathData(
           routeStops.map((stop) => {
             return {
               lat: stop.stop_lat,
@@ -103,7 +103,7 @@ export default function MapComponent() {
       }
     );
 
-    const now = new Date();
+    const now = getToday();
     const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
     const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 

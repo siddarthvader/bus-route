@@ -70,8 +70,8 @@ export default function ColumnFilter({
         type="text"
         value={(columnFilterValue ?? "") as string}
         onChange={(value) => column.setFilterValue(value)}
-        placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="p-2 border border-transparent rounded shadow hover:border-blue-500 w-36"
+        placeholder={`Search (${column.getFacetedUniqueValues().size})`}
+        className="w-24 py-1 border border-transparent rounded shadow hover:border-blue-500"
         list={column.id + "list"}
       />
       <div className="h-1" />

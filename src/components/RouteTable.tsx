@@ -34,41 +34,65 @@ type CellContext<TData extends RouteTableRow, TValue> = TanCellContext<
 
 const columns = [
   columnHelper.accessor("plate_no", {
-    cell: (info) => <div>{info.getValue()}</div>,
-  }),
-  columnHelper.accessor("route_no", {
+    header: "Bus ID",
     cell: (info: unknown) => {
       const infoCasted = info as CellContext<RouteTableRow, string>;
       return (
-        <div className="">
-          <a
-            className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
-            onClick={async (e) => {
-              const selectedRoute: string = infoCasted.row.getValue("route_no");
-              const selectedBus: string = infoCasted.row.getValue("plate_no");
+        <a
+          className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
+          onClick={async (e) => {
+            const selectedRoute: string = infoCasted.row.getValue("route_no");
+            const selectedBus: string = infoCasted.row.getValue("plate_no");
 
-              const startTime: string =
-                infoCasted.row.getValue("trip_start_time");
-              const endTime: string = infoCasted.row.getValue("trip_end_time");
-              infoCasted.router.push({
-                pathname: "/",
-                query: {
-                  agency_id: useURLStore.getState().agency_id,
-                  route_id: selectedRoute.toUpperCase(),
-                },
-              });
-            }}
-          >
-            {infoCasted.getValue().toUpperCase()}
-          </a>
-        </div>
+            infoCasted.router.push({
+              pathname: "/",
+              query: {
+                agency_id: useURLStore.getState().agency_id,
+                route_id: selectedRoute.toUpperCase(),
+                bus_id: selectedBus.toUpperCase(),
+              },
+            });
+          }}
+        >
+          {infoCasted.getValue().toUpperCase()}
+        </a>
+      );
+    },
+  }),
+  columnHelper.accessor("route_no", {
+    header: "Route",
+    cell: (info: unknown) => {
+      const infoCasted = info as CellContext<RouteTableRow, string>;
+      return (
+        <a
+          className="font-medium text-blue-600 cursor-pointer dark:text-blue-500 hover:underline"
+          onClick={async (e) => {
+            const selectedRoute: string = infoCasted.row.getValue("route_no");
+            const selectedBus: string = infoCasted.row.getValue("plate_no");
+
+            const startTime: string =
+              infoCasted.row.getValue("trip_start_time");
+            const endTime: string = infoCasted.row.getValue("trip_end_time");
+            infoCasted.router.push({
+              pathname: "/",
+              query: {
+                agency_id: useURLStore.getState().agency_id,
+                route_id: selectedRoute.toUpperCase(),
+              },
+            });
+          }}
+        >
+          {infoCasted.getValue().toUpperCase()}
+        </a>
       );
     },
   }),
   columnHelper.accessor("trip_start_time", {
+    header: "Start Time",
     cell: (info) => <div>{info.getValue()}</div>,
   }),
   columnHelper.accessor("trip_end_time", {
+    header: "End Time",
     cell: (info) => <div>{info.getValue()}</div>,
   }),
 ];
@@ -115,10 +139,6 @@ function RouteTable() {
                   key={header.id}
                   className="p-2 text-xs font-bold tracking-wider text-left text-gray-500 uppercase"
                 >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
                   {header.column.getCanFilter() &&
                   EnableFilter.includes(
                     header.column.id as keyof RouteTableRow
@@ -126,7 +146,12 @@ function RouteTable() {
                     <div>
                       <ColumnFilter column={header.column} table={table} />
                     </div>
-                  ) : null}
+                  ) : (
+                    flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )
+                  )}
                 </th>
               ))}
             </tr>
@@ -151,7 +176,7 @@ function RouteTable() {
           ))}
         </tbody>
       </table>
-      <div className="flex items-center justify-around p-2 space-x-2 bg-white">
+      <div className="flex flex-wrap items-center justify-around p-2 space-x-2 bg-white">
         <button
           className="px-2 border rounded shadow-xs"
           onClick={() => table.setPageIndex(0)}

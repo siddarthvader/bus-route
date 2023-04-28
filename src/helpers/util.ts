@@ -71,9 +71,11 @@ function getBusLocationRequestQuery(
   busIdList: string[],
   startTime: number,
   endTime: number,
-  type = "pb"
+  type = "pb",
+  size = 10000
 ): BusLocationRequestQuery {
   return {
+    size: size,
     query: {
       bool: {
         must: [
@@ -179,6 +181,21 @@ function elasticResponseBusonRoute(data): BusList {
   });
 }
 
+function getToday(): Date {
+  let today = new Date();
+  return new Date(today.setDate(today.getDate() - 1));
+}
+
+function getTimeInRange(gte: number, lte: number, currentTime: number): number {
+  if (currentTime < gte) {
+    return gte;
+  } else if (currentTime > lte) {
+    return lte;
+  } else {
+    return currentTime;
+  }
+}
+
 export {
   trimLatLang,
   getAxisLabelFromTime,
@@ -189,4 +206,6 @@ export {
   elasticResponseBusLocations,
   getBusOnRouteRequestQuery,
   elasticResponseBusonRoute,
+  getToday,
+  getTimeInRange,
 };

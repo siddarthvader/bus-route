@@ -38,6 +38,7 @@ function RoutePath(props: RoutePathProps) {
                   routeData[index + 1]?.lon ?? stop.lon,
                 ],
               ]}
+              color={color}
             >
               <Tooltip key={"tp2_" + index}>{stop.getTooltip()}</Tooltip>
             </Polyline>
