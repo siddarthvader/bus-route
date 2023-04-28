@@ -5,6 +5,7 @@ import {
   BusOnRouteRequestQuery,
   BusRouteEntity,
   StopsEntity,
+  TimeStampedBusRouteEntity,
 } from "./types";
 
 function trimLatLang(point: string): LatLngExpression | null {
@@ -39,13 +40,13 @@ function generateTimeArray(
   const [startHour, startMinute, startSecond]: string[] = startTime.split(":");
   const [endHour, endMinute, endSecond]: string[] = endTime.split(":");
 
-  const startDate: Date = new Date();
+  const startDate: Date = getToday();
   startDate.setHours(Number(startHour));
   startDate.setMinutes(Number(startMinute));
   startDate.setSeconds(Number(startSecond));
   startDate.setMilliseconds(0);
 
-  const endDate: Date = new Date();
+  const endDate: Date = getToday();
   endDate.setHours(Number(endHour));
   endDate.setMinutes(Number(endMinute));
   endDate.setSeconds(Number(endSecond));
@@ -196,6 +197,33 @@ function getTimeInRange(gte: number, lte: number, currentTime: number): number {
   }
 }
 
+function getTimeStampedBusRoutes(
+  busRoutes: BusRouteEntity[]
+): TimeStampedBusRouteEntity {
+  return busRoutes.reduce((acc, current) => {
+    const timestamp = convertMiliSecondstoMinutes(
+      new Date(current.timestamp).getTime()
+    );
+
+    if (acc[timestamp]) {
+      acc[timestamp].push(current);
+    } else {
+      acc[timestamp] = [current];
+    }
+    return acc;
+  }, {} as TimeStampedBusRouteEntity);
+}
+
+function getCurrentBusForTimeStamp(
+  busRoutes: TimeStampedBusRouteEntity,
+  timestamp: number
+): BusRouteEntity[] {
+  return busRoutes[timestamp];
+}
+
+function convertMiliSecondstoMinutes(miliSeconds: number): number {
+  return Math.floor(miliSeconds / 60000);
+}
 export {
   trimLatLang,
   getAxisLabelFromTime,
@@ -208,4 +236,7 @@ export {
   elasticResponseBusonRoute,
   getToday,
   getTimeInRange,
+  getTimeStampedBusRoutes,
+  getCurrentBusForTimeStamp,
+  convertMiliSecondstoMinutes,
 };

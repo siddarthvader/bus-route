@@ -80,7 +80,7 @@ export default function MapComponent() {
   }, [routeData, map?.target]);
 
   function onMapControlChange(val: number) {
-    console.log(val);
+    // console.log(val);
   }
 
   useEffect(() => {
@@ -107,8 +107,8 @@ export default function MapComponent() {
     const startTimeMili = convertToEpochMili(movieConstants.start_time, now);
     const endTimeMili = convertToEpochMili(movieConstants.end_time, now);
 
-    getBusOnRoute(route_id, startTimeMili, endTimeMili).then((res) => {
-      setBusList(res);
+    getBusOnRoute(route_id, startTimeMili, endTimeMili).then((busList) => {
+      setBusList(busList);
     });
   }, [router.query]);
 
