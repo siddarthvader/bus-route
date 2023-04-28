@@ -10,18 +10,10 @@ import React, { useEffect, useState } from "react";
 
 import { movieConstants } from "@/helpers/constants";
 import { useBusOnRouteStore, useMovieStore } from "@/store/store";
-import { CircleMarker, Marker, Polyline, Tooltip } from "react-leaflet";
+import { CircleMarker } from "react-leaflet";
 
 function BusRoute() {
   const router = useRouter();
-
-  const [busRoute, setBusRoute] = useState<BusRouteEntity[]>(
-    [] as BusRouteEntity[]
-  );
-
-  const [routePathData, setRoutePathData] = useState<RoutePathEntity[]>(
-    [] as RoutePathEntity[]
-  );
 
   const busList: BusList = useBusOnRouteStore((state) => state.busList);
 
@@ -56,9 +48,11 @@ function BusRoute() {
           key={`timestamped-bus_${index}`}
           center={[bus.lat, bus.lon]}
           stroke={false}
+          color="green"
           fillColor="green"
           radius={10}
           fillOpacity={0.69}
+          fill={true}
         ></CircleMarker>
       ))}
     </>

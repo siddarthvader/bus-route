@@ -27,20 +27,6 @@ const useRouteStore = create<RouteStore>((set, get) => ({
     const result = generateTimeArray("12:00:00", "24:00:00");
     return result;
   },
-  activeSpatial: 0,
-  setActiveSpatial: (activeSpatial: number) => {
-    if (!get().isLastSpatial() && activeSpatial > 0) {
-      set(() => ({ activeSpatial }));
-    }
-  },
-  increaseActiveSpatial: () => {
-    if (!get().isLastSpatial()) {
-      set((state) => ({ activeSpatial: state.activeSpatial + 1 }));
-    }
-  },
-  isLastSpatial: () => {
-    return get().routeData.length - 1 <= get().activeSpatial;
-  },
 }));
 
 const useScheduleStore = create<ScheduleStore>((set, get) => ({
@@ -84,9 +70,11 @@ const useMovieStore = create<MovieStore>((set, get) => ({
   isPlaying: false,
   setIsPlaying: (isPlaying: boolean) => set(() => ({ isPlaying })),
   forward: () => {
+    console.log("forward by button");
     set((state) => ({ currentTimestamp: state.currentTimestamp + 10 }));
   },
   backward: () => {
+    console.log("forward by button");
     set((state) => ({ currentTimestamp: state.currentTimestamp - 10 }));
   },
 }));

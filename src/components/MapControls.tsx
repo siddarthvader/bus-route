@@ -6,7 +6,7 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 import RangeSlider from "./RangeSlider";
-import { useMovieStore, useRouteStore } from "../store/store";
+import { useMovieStore } from "../store/store";
 import { useEffect, useRef, useState } from "react";
 import {
   BackwardButtonProps,
@@ -31,15 +31,10 @@ export default function MapControls(props: MapControlProps) {
   const start_time = getHoursMinutes(new Date(rangeList[0]));
   const end_time = getHoursMinutes(new Date(rangeList[rangeList.length - 1]));
 
-  const setActiveSpatial = useRouteStore().setActiveSpatial;
-  const activeSpatial = useRouteStore().activeSpatial;
-
   const forward = useMovieStore((state) => state.forward);
   const backward = useMovieStore((state) => state.backward);
   const isPlaying = useMovieStore((state) => state.isPlaying);
   const setIsPlaying = useMovieStore((state) => state.setIsPlaying);
-
-  const increaseActiveSpatial = useRouteStore().increaseActiveSpatial;
 
   const intervalRef = useRef(null);
   const now = getToday();
@@ -63,6 +58,7 @@ export default function MapControls(props: MapControlProps) {
     } else {
       intervalRef.current = setInterval(() => {
         forward();
+        console.log("forwarding....");
       }, 500);
     }
     setIsPlaying(!isPlaying);
@@ -78,9 +74,9 @@ export default function MapControls(props: MapControlProps) {
           {now.toDateString()} : {start_time} - {end_time}
         </div>
         <div className="flex ">
-          <BackwardButton onClick={() => setActiveSpatial(activeSpatial - 1)} />
+          <BackwardButton onClick={() => backward()} />
           <PlayPauseButton onClick={() => togglePlay()} isPlaying={isPlaying} />
-          <ForwardButton onClick={() => increaseActiveSpatial()} />
+          <ForwardButton onClick={() => forward()} />
         </div>
       </div>
       <RangeSlider

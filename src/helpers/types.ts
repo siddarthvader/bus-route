@@ -26,10 +26,6 @@ export type RouteStore = {
   setRoute: (route: string) => void;
   setRouteData: (routeData: StopsEntity[]) => void;
   getRangeLabel: () => number[];
-  activeSpatial: number;
-  setActiveSpatial: (activeSpatial: number) => void;
-  increaseActiveSpatial: () => void;
-  isLastSpatial: () => Boolean;
 };
 
 export type ScheduleStore = {
